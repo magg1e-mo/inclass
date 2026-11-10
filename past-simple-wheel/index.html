@@ -30,10 +30,13 @@ button:focus-visible { outline: 3px solid var(--muted); outline-offset: 3px; }
 .pointer { position: absolute; left: 50%; top: -6px; transform: translateX(-50%); width: 0; height: 0; border-left: 18px solid transparent; border-right: 18px solid transparent; border-top: 32px solid var(--fg); pointer-events: none; }
 .lbl { position: absolute; left: 280px; top: 260px; width: 230px; height: 40px; transform-origin: 0 50%; display: flex; align-items: center; justify-content: flex-end; white-space: nowrap; font-weight: 700; }
 .facewrap { position: relative; width: 100%; height: 100%; }
-.face { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 4px 10px var(--shadow)); transition: opacity .25s; }
-.face-closed { opacity: 0; }
-.stage[data-s="idle"] .face-closed { opacity: 1; }
-.stage[data-s="idle"] .face-open { opacity: 0; }
+.facebox { position: absolute; left: 0; top: 0; width: 100%; height: 100%; transition: scale .3s; }
+.face { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 4px 10px var(--shadow)); opacity: 0; transition: opacity .12s; }
+.stage[data-f="z"] .face-closed, .stage[data-f="1"] .f1, .stage[data-f="2"] .f2, .stage[data-f="3"] .f3 { opacity: 1; }
+.stage[data-f="2"] .facebox { scale: 1.06; }
+.stage[data-f="3"] .facebox { scale: 1.14; }
+.stage[data-shake="1"] .facebox { animation: faceshake .09s linear infinite; }
+@keyframes faceshake { 0% { transform: translate(2px, -1px) rotate(-3deg); } 25% { transform: translate(-3px, 2px) rotate(3deg); } 50% { transform: translate(2px, 3px) rotate(-2deg); } 75% { transform: translate(-2px, -2px) rotate(4deg); } 100% { transform: translate(2px, -1px) rotate(-3deg); } }
 .zz { position: absolute; left: 92px; top: -4px; font-weight: 700; color: var(--fg); opacity: 0; pointer-events: none; }
 .stage[data-s="idle"] .zz { animation: zzfloat 2.8s ease-out infinite; }
 @keyframes zzfloat { 0% { opacity: 0; transform: translate(0, 14px) scale(.6); } 20% { opacity: .9; } 100% { opacity: 0; transform: translate(28px, -64px) scale(1.2); } }
@@ -94,8 +97,12 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
   <div class="pointer"></div>
   <div class="hub">
     <div class="facewrap" id="facewrap">
-      <img class="face face-closed" src="hub-face-closed.png" alt="">
-      <img class="face face-open" src="hub-face.png" alt="">
+      <div class="facebox">
+        <img class="face face-closed" src="hub-face-closed.png" alt="">
+        <img class="face f1" src="face-1.png" alt="">
+        <img class="face f2" src="face-2.png" alt="">
+        <img class="face f3" src="face-3.png" alt="">
+      </div>
     </div>
     <span class="zz" style="font-size:22px;animation-delay:0s">z</span>
     <span class="zz" style="font-size:30px;animation-delay:.9s">Z</span>
@@ -114,7 +121,7 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
     </div>
   </div>
   <div class="rise r-award award-box">
-    <p class="q">ทีมไหนได้คะแนน?</p>
+    <p class="q">ทีมไหนได้คะแนน ?</p>
     <div class="team-grid" id="teamGrid"></div>
     <button type="button" class="skip" id="skipBtn">ไม่มีทีมไหนได้ · ข้าม</button>
   </div>
@@ -133,7 +140,7 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
   var TB = ['#6B46C1', '#D9488F', '#1B8F7B', '#F2B33D'], TF = ['#FFFFFF', '#FFFFFF', '#FFFFFF', '#2A1B4D'];
   var PAL = [['#6B46C1','#FFFFFF'],['#D9488F','#FFFFFF'],['#F2B33D','#2A1B4D'],['#1B8F7B','#FFFFFF'],['#3B6FD8','#FFFFFF'],['#E4573D','#FFFFFF']];
   var R = 196, n = WORDS.length, a = 360 / n;
-  var S = { st: 'idle', rot: 0, idx: -1, used: [], scores: [0,0,0,0], locked: false, faceRot: 0, theme: 'dark' };
+  var S = { st: 'idle', rot: 0, idx: -1, used: [], scores: [0,0,0,0], locked: false, faceRot: 0, theme: 'dark', face: '1', shake: 0 };
   var timers = [];
 
   function rule(b, v) {
@@ -177,6 +184,8 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
     var bgCol = L ? '#F6F3EE' : '#000000', dimFill = L ? '#DAD6E2' : '#222228', dimInk = L ? '#8C86A0' : '#6D6D78';
     root.setAttribute('data-theme', S.theme);
     stage.setAttribute('data-s', S.st);
+    stage.setAttribute('data-f', S.st === 'idle' ? 'z' : S.face);
+    stage.setAttribute('data-shake', S.shake);
     $('disc').setAttribute('fill', bgCol);
     var landed = S.st !== 'idle' && S.st !== 'spinning';
     WORDS.forEach(function (w, i) {
@@ -218,19 +227,21 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
     var target = avail[Math.floor(Math.random() * avail.length)];
     var want = 270 - (target + 0.5) * a + (Math.random() - 0.5) * a * 0.6;
     var delta = ((want - S.rot) % 360 + 360) % 360 + 360 * (5 + Math.floor(Math.random() * 3));
-    S.st = 'spinning'; S.idx = target; S.rot += delta; S.faceRot -= 360 * 8;
+    S.st = 'spinning'; S.idx = target; S.rot += delta; S.faceRot -= 360 * 8; S.face = '1'; S.shake = 0;
     $('spinner').style.transition = 'transform 4400ms cubic-bezier(.12,.6,.15,1)';
     $('spinner').style.transform = 'rotate(' + S.rot + 'deg)';
     $('facewrap').style.transition = 'transform 6200ms cubic-bezier(.2,.55,.25,1)';
     $('facewrap').style.transform = 'rotate(' + S.faceRot + 'deg)';
     render();
+    later(function () { if (S.st === 'spinning') { S.face = '2'; render(); } }, 1500);
+    later(function () { if (S.st === 'spinning') { S.face = '3'; S.shake = 1; render(); } }, 2700);
     later(function () {
       S.used.push(target);
       var w = WORDS[target];
       $('word').textContent = w[0]; $('word').style.fontSize = sizeFor(w[0], 120) + 'px';
       $('v2').textContent = w[1]; $('v2').style.fontSize = sizeFor(w[1], 86) + 'px';
       $('rule').textContent = rule(w[0], w[1]);
-      S.st = 'landed'; render();
+      S.st = 'landed'; S.face = '3'; S.shake = 0; render();
     }, 4500);
   }
   function reveal() { if (S.st === 'landed') { S.st = 'revealed'; render(); } }
