@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="th">
+<html lang="th" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -9,268 +9,132 @@
 <meta name="apple-mobile-web-app-title" content="วงล้อ V.2">
 <title>วงล้อ V.2</title>
 <style>
-@font-face { font-family: 'FC Vision'; font-weight: 400; font-style: normal; font-display: swap;
-  src: url('../fonts/FCVision-Regular.woff2') format('woff2'); }
-@font-face { font-family: 'FC Vision'; font-weight: 600; font-style: normal; font-display: swap;
-  src: url('../fonts/FCVision-SemiBold.woff2') format('woff2'); }
-@font-face { font-family: 'FC Vision'; font-weight: 700; font-style: normal; font-display: swap;
-  src: url('../fonts/FCVision-Bold.woff2') format('woff2'); }
-:root { color-scheme: light; padding: env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px); }
-body { margin: 0; }
-[hidden] { display: none !important; }
-</style>
-<style>
-/* Layout: one screen, no scrolling, built for an iPad mirrored to a TV.
-   Landscape: wheel left, answer card + big button + team scores right. Portrait: wheel on top, controls below. */
-:root {
-  --bg: #EFE7FB;
-  --surface: #FFFFFF;
-  --ink: #2A1B4D;
-  --muted: #65558A;
-  --line: #B7A2E6;
-  --accent: #5B3BB5;
-  --accent-deep: #3E2584;
-  --accent-ink: #FFFFFF;
-  --chip: #E6DAFB;
-  --chip-ink: #3E2584;
-  --used: #D9D0EA;
-  --used-ink: #8A7CAD;
-  --font-display: 'FC Vision', 'Sarabun', 'Thonburi', 'Noto Sans Thai', system-ui, sans-serif;
-  --font-body: 'FC Vision', 'Sarabun', 'Thonburi', 'Noto Sans Thai', system-ui, sans-serif;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #150F26; --surface: #21183A; --ink: #F2ECFF; --muted: #A99BD0; --line: #5A4690;
-    --accent: #A98BFF; --accent-deep: #6E50C4; --accent-ink: #1A1032;
-    --chip: #3A2C63; --chip-ink: #E3D8FF; --used: #2E2450; --used-ink: #7F70A6;
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #150F26; --surface: #21183A; --ink: #F2ECFF; --muted: #A99BD0; --line: #5A4690;
-  --accent: #A98BFF; --accent-deep: #6E50C4; --accent-ink: #1A1032;
-  --chip: #3A2C63; --chip-ink: #E3D8FF; --used: #2E2450; --used-ink: #7F70A6;
-  color-scheme: dark;
-}
+@font-face { font-family: 'FC Vision'; font-weight: 400; font-style: normal; font-display: swap; src: url('../fonts/FCVision-Regular.woff2') format('woff2'); }
+@font-face { font-family: 'FC Vision'; font-weight: 600; font-style: normal; font-display: swap; src: url('../fonts/FCVision-SemiBold.woff2') format('woff2'); }
+@font-face { font-family: 'FC Vision'; font-weight: 700; font-style: normal; font-display: swap; src: url('../fonts/FCVision-Bold.woff2') format('woff2'); }
+html { --bg: #000000; --fg: #FFFFFF; --muted: #9A9AA6; --line: #3A3A44; --v2: #56AC6B; --shadow: rgba(0,0,0,.6); color-scheme: dark; }
+html[data-theme="light"] { --bg: #F6F3EE; --fg: #1B1530; --muted: #6B6580; --line: #CFC8DC; --v2: #2E8B4F; --shadow: rgba(27,21,48,.25); color-scheme: light; }
 * { box-sizing: border-box; }
-body {
-  background: var(--bg);
-  color: var(--ink);
-  font-family: var(--font-body);
-  font-size: 16px;
-  line-height: 1.4;
-  padding-block: 12px;
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px));
-  -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
-  -webkit-tap-highlight-color: transparent; touch-action: manipulation; overscroll-behavior: none;
-}
-input, textarea { -webkit-user-select: text; user-select: text; }
-button, input, textarea { font: inherit; color: inherit; }
-button:focus-visible, input:focus-visible, textarea:focus-visible {
-  outline: 3px solid var(--accent); outline-offset: 2px;
-}
-.app {
-  max-width: 1400px; margin: 0 auto; min-height: 540px;
-  height: calc(100vh - 24px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
-  height: calc(100dvh - 24px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
-  display: flex; flex-direction: column; gap: 12px;
-}
-.top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 20px; }
-h1 { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 1.9rem; line-height: 1.1; }
-.sub { margin: 2px 0 0; color: var(--muted); font-size: .92rem; }
-.sets { display: flex; flex-wrap: wrap; gap: 8px; }
-.sets button {
-  border: 2px dashed var(--line); background: transparent; border-radius: 12px;
-  min-height: 44px; padding: 8px 16px; cursor: pointer; font-weight: 600;
-}
-.sets button[aria-pressed="true"] { background: var(--accent); border: 2px solid var(--accent); color: var(--accent-ink); }
+[hidden] { display: none !important; }
+html, body { margin: 0; height: 100%; }
+body { background: var(--bg); color: var(--fg); overflow: hidden; overscroll-behavior: none; transition: background .3s, color .3s;
+  font-family: 'FC Vision', 'Sarabun', 'Thonburi', 'Noto Sans Thai', system-ui, sans-serif;
+  -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+button { font: inherit; }
+button:focus-visible { outline: 3px solid var(--muted); outline-offset: 3px; }
 
-.stage {
-  flex: 1; min-height: 0; display: grid; gap: 20px;
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr);
-}
-@media (orientation: portrait) {
-  .stage { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; gap: 12px; }
-}
-.wheel-col { display: flex; flex-direction: column; gap: 4px; min-width: 0; min-height: 0; }
-.wheel-box { flex: 1; min-width: 0; min-height: 0; container-type: size; display: grid; place-items: center; }
-.wheel-wrap { position: relative; width: min(100%, 60vh); max-width: 100%; aspect-ratio: 1; }
-@supports (width: 1cqw) { .wheel-wrap { width: min(100cqw, 100cqh); } }
-canvas { display: block; width: 100%; height: 100%; cursor: pointer; }
-.pointer {
-  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-  width: 0; height: 0; border-left: 18px solid transparent; border-right: 18px solid transparent;
-  border-top: 32px solid var(--ink); pointer-events: none; filter: drop-shadow(0 2px 0 var(--bg));
-}
-.status { text-align: center; color: var(--muted); font-size: 1rem; margin: 0; }
-
-.side { display: flex; flex-direction: column; justify-content: center; gap: 12px; min-width: 0; min-height: 0; }
-.card {
-  background: var(--surface); border: 3px dashed var(--line); border-radius: 18px;
-  padding: 12px 20px 14px; display: grid; gap: 2px; min-width: 0;
-}
-.label { margin: 0; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
-.word {
-  margin: 0; font-family: var(--font-display); font-weight: 700; line-height: 1.05; overflow-wrap: anywhere;
-  font-size: clamp(2.8rem, min(9vw, 11vh), 6rem);
-}
-.v2row { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; min-height: 3rem; }
-.arrow { font-family: var(--font-display); color: var(--muted); font-size: 1.3rem; }
-.v2 {
-  margin: 0; font-family: var(--font-display); font-weight: 700; line-height: 1.1; color: var(--accent); overflow-wrap: anywhere;
-  font-size: clamp(2rem, min(6vw, 8vh), 3.6rem);
-}
-.v2.dim { color: var(--muted); }
-.chip { padding: 4px 12px; border-radius: 999px; background: var(--chip); color: var(--chip-ink); font-size: .95rem; font-weight: 600; }
-.hint { margin: 0; color: var(--muted); font-size: .98rem; min-height: 1.4em; }
-
-.main {
-  width: 100%; min-height: 64px; border: 0; border-radius: 16px; padding: 12px 20px; cursor: pointer;
-  background: var(--accent); color: var(--accent-ink);
-  font-family: var(--font-display); font-weight: 700; font-size: clamp(1.4rem, 3.4vh, 2rem);
-  box-shadow: 0 6px 0 var(--accent-deep); transition: transform .08s, box-shadow .08s; margin-bottom: 6px;
-}
-.main:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 2px 0 var(--accent-deep); }
-.main:disabled { opacity: .65; cursor: default; }
-
-.teams { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-@media (orientation: portrait) and (min-width: 600px) { .teams { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-.team {
-  background: var(--surface); border: 2px solid var(--line); border-top: 8px solid var(--tc);
-  border-radius: 14px; padding: 6px 10px 10px; display: grid; gap: 2px; min-width: 0;
-}
-.team input {
-  width: 100%; min-width: 0; border: 0; border-bottom: 1px dashed var(--line); background: transparent;
-  font-weight: 600; padding: 2px 0;
-}
-.score-row { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
-.score { font-family: var(--font-display); font-weight: 700; font-size: 2.3rem; line-height: 1; font-variant-numeric: tabular-nums; }
-.step {
-  flex: none; width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--line); background: transparent;
-  font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; line-height: 1; cursor: pointer;
-}
-.step:active { background: var(--chip); }
-
-.tools { display: flex; flex-wrap: wrap; gap: 8px; }
-.tools button, .apply, .close {
-  border: 2px dashed var(--line); background: transparent; border-radius: 10px;
-  min-height: 44px; padding: 6px 14px; cursor: pointer; font-size: .95rem;
-}
-.tools button[aria-pressed="false"] { color: var(--muted); }
-
-.sheet {
-  position: fixed; inset: 0; z-index: 20; background: rgba(20, 10, 40, .55);
-  display: flex; align-items: flex-start; justify-content: center;
-  padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) 16px max(16px, env(safe-area-inset-left, 0px));
-}
-.sheet-card {
-  background: var(--surface); color: var(--ink); border: 3px dashed var(--line); border-radius: 18px;
-  padding: 16px 18px; width: min(580px, 100%); max-height: 100%; overflow: auto; display: grid; gap: 10px;
-}
-.sheet-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-.sheet-head h2 { margin: 0; font-family: var(--font-display); font-size: 1.3rem; }
-.sheet-card p { margin: 0; color: var(--muted); font-size: .95rem; }
-textarea {
-  width: 100%; min-height: 11em; resize: vertical; border: 2px solid var(--line); border-radius: 10px;
-  background: var(--bg); padding: 10px 12px; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 1rem;
-}
-.apply { justify-self: start; background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
-.msg { min-height: 1.3em; }
-
-@media (prefers-reduced-motion: reduce) { .main { transition: none; } }
-
-.back { display: inline-block; min-height: 32px; color: var(--muted); text-decoration: none; font-size: .95rem; font-weight: 600; }
-.back:active { color: var(--accent); }
+.stage { position: fixed; left: 50%; top: 50%; width: 1180px; height: 820px; overflow: hidden; transform-origin: 50% 50%; transform: translate(-50%, -50%); }
+.wheel { position: absolute; left: 317px; top: 130px; width: 553px; height: 571px; cursor: pointer; transition: transform .9s cubic-bezier(.2,.8,.2,1); }
+.stage[data-s="landed"] .wheel, .stage[data-s="revealed"] .wheel, .stage[data-s="award"] .wheel { transform: translateX(-240px); }
+.spinner { position: relative; width: 100%; height: 100%; }
+.pointer { position: absolute; left: 50%; top: -6px; transform: translateX(-50%); width: 0; height: 0; border-left: 18px solid transparent; border-right: 18px solid transparent; border-top: 32px solid var(--fg); pointer-events: none; }
+.lbl { position: absolute; left: 280px; top: 260px; width: 230px; height: 40px; transform-origin: 0 50%; display: flex; align-items: center; justify-content: flex-end; white-space: nowrap; font-weight: 700; }
+.facewrap { position: relative; width: 100%; height: 100%; }
+.face { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 4px 10px var(--shadow)); transition: opacity .25s; }
+.face-closed { opacity: 0; }
+.stage[data-s="idle"] .face-closed { opacity: 1; }
+.stage[data-s="idle"] .face-open { opacity: 0; }
+.zz { position: absolute; left: 92px; top: -4px; font-weight: 700; color: var(--fg); opacity: 0; pointer-events: none; }
+.stage[data-s="idle"] .zz { animation: zzfloat 2.8s ease-out infinite; }
+@keyframes zzfloat { 0% { opacity: 0; transform: translate(0, 14px) scale(.6); } 20% { opacity: .9; } 100% { opacity: 0; transform: translate(28px, -64px) scale(1.2); } }
+.hub { position: absolute; left: 50%; top: 50%; width: 138px; height: 138px; margin: -69px 0 0 -69px; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+.panel { position: absolute; left: 693px; top: 0; width: 440px; height: 820px; }
+.wg { position: absolute; left: 0; top: 50%; width: 440px; transform: translateY(-50%); transition: transform .8s cubic-bezier(.2,.8,.2,1); }
+.stage[data-s="award"] .wg { transform: translateY(calc(-50% - 120px)); }
+.award-box { position: absolute; left: 0; top: 470px; width: 440px; }
+.rise { opacity: 0; visibility: hidden; transform: translateY(28px); transition: opacity .25s, transform .25s, visibility 0s .25s; }
+.stage[data-s="landed"] .r-word, .stage[data-s="revealed"] .r-word, .stage[data-s="award"] .r-word { opacity: 1; visibility: visible; transform: none; transition: opacity .6s ease .55s, transform .6s ease .55s, visibility 0s .55s; }
+.stage[data-s="landed"] .r-reveal { opacity: 1; visibility: visible; transform: none; transition: opacity .6s ease 1.3s, transform .6s ease 1.3s, visibility 0s 1.3s; }
+.stage[data-s="revealed"] .r-v2, .stage[data-s="award"] .r-v2 { opacity: 1; visibility: visible; transform: none; transition: opacity .5s ease, transform .5s ease; }
+.stage[data-s="award"] .r-award { opacity: 1; visibility: visible; transform: none; transition: opacity .5s ease, transform .5s ease; }
+.stage[data-s="award"] .r-v2 { opacity: .85; }
+.slot { position: relative; height: 150px; }
+.slot > * { position: absolute; left: 0; top: 10px; }
+.label { margin: 0 0 4px; color: var(--muted); font-size: 20px; letter-spacing: .04em; }
+.word { margin: 0; font-weight: 700; line-height: 1.05; white-space: nowrap; }
+.reveal { cursor: pointer; border: 0; border-radius: 999px; background: var(--fg); color: var(--bg); font-weight: 700; font-size: 32px; padding: 10px 52px; min-height: 64px; }
+.v2 { margin: 0; font-weight: 700; line-height: 1.05; color: var(--v2); white-space: nowrap; left: 3px; top: -6px; }
+.chip { left: -1px; top: 84px; }
+.chip span { display: inline-block; margin-top: 8px; border: 2px solid var(--line); color: var(--muted); border-radius: 999px; padding: 2px 16px; font-size: 18px; }
+.award-box .q { margin: 0 0 10px; color: var(--muted); font-size: 20px; }
+.team-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.team-btn { cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 10px; min-height: 76px; padding: 10px 20px; border: 0; border-radius: 18px; font-weight: 700; font-size: 26px; }
+.team-btn .ts { font-size: 32px; }
+.skip { margin-top: 10px; min-height: 48px; background: none; border: 0; color: var(--muted); cursor: pointer; font-size: 18px; text-decoration: underline; text-underline-offset: 3px; }
+.scores { position: absolute; left: 0; right: 0; bottom: 22px; display: flex; justify-content: center; gap: 36px; color: var(--muted); font-size: 20px; transition: opacity .3s; }
+.scores b { color: var(--fg); font-size: 26px; margin-left: 6px; }
+.stage[data-s="landed"] .scores, .stage[data-s="revealed"] .scores, .stage[data-s="award"] .scores { opacity: 0; }
+.theme-btn { position: absolute; right: 24px; top: 24px; z-index: 5; width: 52px; height: 52px; border-radius: 50%; border: 2px solid var(--line); background: transparent; color: var(--muted); display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; }
+.theme-btn .sun { display: none; }
+html[data-theme="light"] .theme-btn .sun { display: block; }
+html[data-theme="light"] .theme-btn .moon { display: none; }
+.back { position: absolute; left: 24px; top: 30px; z-index: 5; color: var(--muted); text-decoration: none; font-size: 18px; padding: 8px 4px; opacity: .8; }
+.stage:not([data-s="idle"]) .back { opacity: 0; pointer-events: none; }
+@media (prefers-reduced-motion: reduce) { .stage, .stage * { animation: none !important; } }
 </style>
 </head>
 <body>
-<div class="app">
-  <header class="top">
-    <div>
-      <a class="back" href="../">← สื่อทั้งหมด</a>
-      <h1>วงล้อ V.2</h1>
-      <p class="sub">Past Simple Tense · ม.2/2 · หมุนแล้วบอกช่อง 2</p>
+<div class="stage" id="stage" data-s="idle">
+
+<a class="back" href="../" id="backLink">← สื่อทั้งหมด</a>
+
+<button class="theme-btn" id="themeBtn" type="button" aria-label="สลับโหมดสว่างและมืด">
+  <svg class="moon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
+  <svg class="sun" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+</button>
+
+<div class="wheel" id="wheel" role="button" tabindex="0" aria-label="หมุนวงล้อ">
+  <div class="spinner" id="spinner">
+    <svg viewBox="0 0 400 400" width="100%" height="100%" aria-hidden="true">
+      <circle cx="200" cy="200" r="196" id="disc"></circle>
+      <g id="paths"></g>
+    </svg>
+    <div id="labels"></div>
+  </div>
+  <div class="pointer"></div>
+  <div class="hub">
+    <div class="facewrap" id="facewrap">
+      <img class="face face-closed" src="hub-face-closed.png" alt="">
+      <img class="face face-open" src="hub-face.png" alt="">
     </div>
-    <div class="sets" role="group" aria-label="เลือกชุดคำ">
-      <button type="button" data-set="irregular" aria-pressed="true">ผิดรูป 12 คำ</button>
-      <button type="button" data-set="regular" aria-pressed="false">เติม -ed 12 คำ</button>
-      <button type="button" data-set="mixed" aria-pressed="false">ผสม (สุ่มใหม่)</button>
-      <button type="button" data-set="custom" aria-pressed="false">กำหนดเอง</button>
-    </div>
-  </header>
-
-  <main class="stage">
-    <section class="wheel-col">
-      <div class="wheel-box">
-        <div class="wheel-wrap">
-          <canvas id="wheel" aria-label="วงล้อคำกริยา แตะเพื่อหมุน"></canvas>
-          <div class="pointer"></div>
-        </div>
-      </div>
-      <p class="status" id="status"></p>
-    </section>
-
-    <section class="side">
-      <div class="card" id="card" aria-live="polite">
-        <p class="label" id="label"></p>
-        <p class="word" id="word"></p>
-        <div class="v2row">
-          <span class="arrow">V.2</span>
-          <p class="v2" id="v2"></p>
-          <span class="chip" id="rule" hidden></span>
-        </div>
-        <p class="hint" id="hint"></p>
-      </div>
-
-      <button type="button" class="main" id="main"></button>
-
-      <div class="teams" id="teams"></div>
-
-      <div class="tools">
-        <button type="button" id="soundBtn" aria-pressed="true">เสียง: เปิด</button>
-        <button type="button" id="resetBtn">เริ่มรอบใหม่</button>
-        <button type="button" id="scoreResetBtn">ล้างคะแนน</button>
-        <button type="button" id="editBtn">แก้ไขคำ</button>
-      </div>
-    </section>
-  </main>
+    <span class="zz" style="font-size:22px;animation-delay:0s">z</span>
+    <span class="zz" style="font-size:30px;animation-delay:.9s">Z</span>
+    <span class="zz" style="font-size:40px;animation-delay:1.8s">Z</span>
+  </div>
 </div>
 
-<div class="sheet" id="editor" hidden>
-  <div class="sheet-card" role="dialog" aria-modal="true" aria-labelledby="edTitle">
-    <div class="sheet-head">
-      <h2 id="edTitle">แก้ไขรายการคำ</h2>
-      <button type="button" class="close" id="closeBtn">ปิด</button>
+<div class="panel" aria-live="polite">
+  <div class="wg">
+    <p class="rise r-word label">คำกริยา · ช่อง 1</p>
+    <p class="rise r-word word" id="word"></p>
+    <div class="slot">
+      <button type="button" class="rise r-reveal reveal" id="revealBtn">เฉลย</button>
+      <div class="rise r-v2 chip"><span id="rule"></span></div>
+      <p class="rise r-v2 v2" id="v2"></p>
     </div>
-    <p>บรรทัดละ 1 คำ เขียนว่า กริยา, ช่อง 2 เช่น go, went (ใส่ได้ 4 ถึง 16 คำ)</p>
-    <textarea id="wordsInput" spellcheck="false" autocapitalize="off" autocorrect="off" aria-label="รายการคำกริยาและช่อง 2"></textarea>
-    <button type="button" class="apply" id="applyBtn">ใช้รายการนี้</button>
-    <p class="msg" id="editorMsg" role="status"></p>
   </div>
+  <div class="rise r-award award-box">
+    <p class="q">ทีมไหนได้คะแนน?</p>
+    <div class="team-grid" id="teamGrid"></div>
+    <button type="button" class="skip" id="skipBtn">ไม่มีทีมไหนได้ · ข้าม</button>
+  </div>
+</div>
+
+<div class="scores" id="scores"></div>
 </div>
 
 <script>
 (function () {
-  var TAU = Math.PI * 2;
   var $ = function (id) { return document.getElementById(id); };
-  var canvas = $('wheel'), ctx = canvas.getContext('2d');
-  var wrap = canvas.parentElement;
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  var PAL = [
-    { bg: '#6B46C1', fg: '#FFFFFF' }, { bg: '#D9488F', fg: '#FFFFFF' }, { bg: '#F2B33D', fg: '#2A1B4D' },
-    { bg: '#1B8F7B', fg: '#FFFFFF' }, { bg: '#3B6FD8', fg: '#FFFFFF' }, { bg: '#E4573D', fg: '#FFFFFF' }
-  ];
-
-  var IRREGULAR = [['buy','bought'],['find','found'],['go','went'],['see','saw'],['fly','flew'],['meet','met'],
+  var stage = $('stage'), root = document.documentElement;
+  var WORDS = [['buy','bought'],['find','found'],['go','went'],['see','saw'],['fly','flew'],['meet','met'],
     ['break','broke'],['win','won'],['take','took'],['run','ran'],['leave','left'],['build','built']];
-  var REGULAR = [['walk','walked'],['love','loved'],['hope','hoped'],['deny','denied'],['study','studied'],['play','played'],
-    ['stay','stayed'],['stop','stopped'],['shop','shopped'],['plan','planned'],['bake','baked'],['wash','washed']];
-  var POOL_REG = REGULAR.concat([['cook','cooked'],['listen','listened'],['want','wanted'],['taste','tasted'],['notice','noticed'],
-    ['modify','modified'],['pray','prayed'],['obey','obeyed'],['beg','begged'],['join','joined'],['celebrate','celebrated'],
-    ['graduate','graduated'],['receive','received']]);
-  var POOL_IRR = IRREGULAR.concat([['get','got'],['cut','cut']]);
+  var NAMES = ['ทีม 1', 'ทีม 2', 'ทีม 3', 'ทีม 4'];
+  var TB = ['#6B46C1', '#D9488F', '#1B8F7B', '#F2B33D'], TF = ['#FFFFFF', '#FFFFFF', '#FFFFFF', '#2A1B4D'];
+  var PAL = [['#6B46C1','#FFFFFF'],['#D9488F','#FFFFFF'],['#F2B33D','#2A1B4D'],['#1B8F7B','#FFFFFF'],['#3B6FD8','#FFFFFF'],['#E4573D','#FFFFFF']];
+  var R = 196, n = WORDS.length, a = 360 / n;
+  var S = { st: 'idle', rot: 0, idx: -1, used: [], scores: [0,0,0,0], locked: false, faceRot: 0, theme: 'dark' };
+  var timers = [];
 
   function rule(b, v) {
     if (v === b + 'ed') return 'เติม -ed';
@@ -279,270 +143,123 @@ textarea {
     if (v.length === b.length + 3 && v === b + b.slice(-1) + 'ed') return 'ซ้ำตัวท้าย แล้วเติม -ed';
     return 'ไม่ปกติ (Irregular)';
   }
+  function pt(deg) { var r = deg * Math.PI / 180; return [(200 + R * Math.cos(r)).toFixed(2), (200 + R * Math.sin(r)).toFixed(2)]; }
+  function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
 
-  var words = [], used = new Set(), state = 'idle', current = -1, winner = -1, rot = 0, activeSet = 'irregular';
-  var teams = [{ n: 'ทีม 1', s: 0 }, { n: 'ทีม 2', s: 0 }, { n: 'ทีม 3', s: 0 }, { n: 'ทีม 4', s: 0 }];
-  var TEAM_COL = [PAL[0].bg, PAL[1].bg, PAL[3].bg, PAL[2].bg];
+  /* ---- scale the fixed 1180x820 stage to the screen ---- */
+  function fit() {
+    var s = Math.min(window.innerWidth / 1180, window.innerHeight / 820);
+    stage.style.transform = 'translate(-50%, -50%) scale(' + s + ')';
+  }
+  window.addEventListener('resize', fit);
+  window.addEventListener('orientationchange', function () { setTimeout(fit, 250); });
+  fit();
 
-  /* ---------- colors from theme tokens ---------- */
-  var C = {};
-  function refreshColors() {
-    var s = getComputedStyle(document.documentElement);
-    C = { ink: s.getPropertyValue('--ink').trim() || '#2A1B4D', surface: s.getPropertyValue('--surface').trim() || '#fff',
-      used: s.getPropertyValue('--used').trim() || '#ddd', usedInk: s.getPropertyValue('--used-ink').trim() || '#888',
-      accent: s.getPropertyValue('--accent').trim() || '#5B3BB5' };
-    draw();
+  /* ---- build wheel once ---- */
+  var NS = 'http://www.w3.org/2000/svg', pathEls = [], lblEls = [];
+  WORDS.forEach(function (w, i) {
+    var p1 = pt(i * a), p2 = pt((i + 1) * a);
+    var path = document.createElementNS(NS, 'path');
+    path.setAttribute('d', 'M200 200 L' + p1[0] + ' ' + p1[1] + ' A' + R + ' ' + R + ' 0 0 1 ' + p2[0] + ' ' + p2[1] + ' Z');
+    path.setAttribute('stroke-width', '3'); path.setAttribute('stroke-linejoin', 'round');
+    $('paths').appendChild(path); pathEls.push(path);
+    var d = document.createElement('div');
+    d.className = 'lbl'; d.textContent = w[0];
+    d.style.transform = 'rotate(' + ((i + 0.5) * a).toFixed(2) + 'deg)';
+    d.style.fontSize = Math.round(Math.min(28, Math.max(14, 118 / (w[0].length * 0.6))) * 1.4) + 'px';
+    $('labels').appendChild(d); lblEls.push(d);
+  });
+
+  function sizeFor(t, base) { return Math.max(40, Math.min(base, Math.floor(430 / (Math.max(t.length, 1) * 0.52)))); }
+
+  function render() {
+    var L = S.theme === 'light';
+    var bgCol = L ? '#F6F3EE' : '#000000', dimFill = L ? '#DAD6E2' : '#222228', dimInk = L ? '#8C86A0' : '#6D6D78';
+    root.setAttribute('data-theme', S.theme);
+    stage.setAttribute('data-s', S.st);
+    $('disc').setAttribute('fill', bgCol);
+    var landed = S.st !== 'idle' && S.st !== 'spinning';
+    WORDS.forEach(function (w, i) {
+      var ci = i % PAL.length; if (i === n - 1 && ci === 0) ci = 2;
+      var dim = S.used.indexOf(i) >= 0 && !(landed && i === S.idx);
+      var win = landed && i === S.idx, op = landed && !win ? 0.3 : 1;
+      var p = pathEls[i];
+      p.setAttribute('fill', dim ? dimFill : PAL[ci][0]);
+      p.setAttribute('stroke', bgCol); p.setAttribute('opacity', op);
+      lblEls[i].style.color = dim ? dimInk : PAL[ci][1]; lblEls[i].style.opacity = op;
+    });
+    $('scores').innerHTML = NAMES.map(function (nm, i) { return '<span>' + nm + ' <b>' + S.scores[i] + '</b></span>'; }).join('');
+    $('teamGrid').querySelectorAll('.ts').forEach(function (el, i) { el.textContent = S.scores[i]; });
   }
 
-  /* ---------- keep the iPad screen awake ---------- */
+  NAMES.forEach(function (nm, i) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'team-btn'; b.style.background = TB[i]; b.style.color = TF[i];
+    b.innerHTML = '<span>' + nm + '</span><span class="ts">0</span>';
+    b.addEventListener('click', function (e) { e.stopPropagation(); pick(i); });
+    $('teamGrid').appendChild(b);
+  });
+
+  /* ---- keep screen awake ---- */
   var wake = null;
   function keepAwake() {
-    try {
-      if (navigator.wakeLock && !wake && document.visibilityState === 'visible') {
-        navigator.wakeLock.request('screen').then(function (l) {
-          wake = l; l.addEventListener('release', function () { wake = null; });
-        }).catch(function () {});
-      }
-    } catch (e) {}
+    try { if (navigator.wakeLock && !wake && document.visibilityState === 'visible') {
+      navigator.wakeLock.request('screen').then(function (l) { wake = l; l.addEventListener('release', function () { wake = null; }); }).catch(function () {});
+    } } catch (e) {}
   }
   document.addEventListener('visibilitychange', keepAwake);
 
-  /* ---------- sound ---------- */
-  var actx = null, soundOn = true, lastTick = 0;
-  function audio() {
-    try {
-      if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
-      if (actx.state === 'suspended') actx.resume();
-    } catch (e) { actx = null; }
-  }
-  function tone(freq, dur, type, gain, delay) {
-    if (!soundOn || !actx) return;
-    try {
-      var t = actx.currentTime + (delay || 0);
-      var o = actx.createOscillator(), g = actx.createGain();
-      o.type = type; o.frequency.value = freq;
-      g.gain.setValueAtTime(gain, t);
-      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-      o.connect(g); g.connect(actx.destination); o.start(t); o.stop(t + dur);
-    } catch (e) {}
-  }
-
-  /* ---------- drawing ---------- */
-  function resize() {
-    var dpr = window.devicePixelRatio || 1, w = Math.round(wrap.clientWidth * dpr);
-    if (w < 10) return;
-    canvas.width = w; canvas.height = w; draw();
-  }
-  function colorFor(i, n) {
-    var idx = i % PAL.length;
-    if (i === n - 1 && n > 1 && idx === 0) idx = 2;
-    return PAL[idx];
-  }
-  function draw() {
-    var w = canvas.width, n = words.length;
-    if (!w) return;
-    var u = w / wrap.clientWidth, cx = w / 2, R = w / 2 - 14 * u;
-    ctx.clearRect(0, 0, w, w);
-    if (!n) return;
-    var a = TAU / n;
-    ctx.save(); ctx.translate(cx, cx);
-    ctx.lineJoin = 'round';
-    for (var i = 0; i < n; i++) {
-      var s = rot + i * a, dim = used.has(i) && i !== winner, col = colorFor(i, n);
-      ctx.beginPath(); ctx.moveTo(0, 0); ctx.arc(0, 0, R, s, s + a); ctx.closePath();
-      ctx.fillStyle = dim ? C.used : col.bg; ctx.fill();
-      ctx.lineWidth = 3 * u; ctx.strokeStyle = C.surface; ctx.stroke();
-      ctx.save(); ctx.rotate(s + a / 2);
-      ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
-      ctx.fillStyle = dim ? C.usedInk : col.fg;
-      var fs = Math.min(R * 0.12, R * 0.7 * a * 0.5), maxW = R * 0.62;
-      ctx.font = '700 ' + fs + 'px "FC Vision", Thonburi, sans-serif';
-      var wd = ctx.measureText(words[i].b).width;
-      if (wd > maxW) { fs = fs * maxW / wd; ctx.font = '700 ' + fs + 'px "FC Vision", Thonburi, sans-serif'; }
-      ctx.fillText(words[i].b, R - 28 * u, 0);
-      ctx.restore();
-    }
-    if (winner >= 0) {
-      var ws = rot + winner * a;
-      ctx.beginPath(); ctx.moveTo(0, 0); ctx.arc(0, 0, R, ws, ws + a); ctx.closePath();
-      ctx.lineWidth = 7 * u; ctx.strokeStyle = C.ink; ctx.stroke();
-    }
-    ctx.beginPath(); ctx.arc(0, 0, R, 0, TAU); ctx.lineWidth = 5 * u; ctx.strokeStyle = C.ink; ctx.stroke();
-    ctx.beginPath(); ctx.arc(0, 0, R * 0.17, 0, TAU); ctx.fillStyle = C.surface; ctx.fill();
-    ctx.lineWidth = 4 * u; ctx.strokeStyle = C.ink; ctx.stroke();
-    ctx.fillStyle = C.accent; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.font = '700 ' + (R * 0.11) + 'px "FC Vision", Thonburi, sans-serif'; ctx.fillText('V.2', 0, R * 0.01);
-    ctx.restore();
-  }
-
-  /* ---------- UI state ---------- */
-  function updateStatus() { $('status').textContent = 'เหลือ ' + (words.length - used.size) + ' จาก ' + words.length + ' คำ'; }
-  function updateCard() {
-    var lab = $('label'), wd = $('word'), v2 = $('v2'), ru = $('rule'), hint = $('hint');
-    ru.hidden = true; v2.classList.add('dim');
-    if (state === 'idle') {
-      lab.textContent = 'พร้อมแล้ว'; wd.textContent = '?'; v2.textContent = '—';
-      hint.textContent = 'กดปุ่มด้านล่างหรือแตะวงล้อเพื่อสุ่มคำ';
-    } else if (state === 'spinning') {
-      lab.textContent = 'กำลังหมุน'; wd.textContent = '…'; v2.textContent = '—'; hint.textContent = '';
-    } else if (state === 'landed') {
-      lab.textContent = 'คำกริยา (ช่อง 1)'; wd.textContent = words[current].b; v2.textContent = '???';
-      hint.textContent = 'พูดช่อง 2 แล้วแต่งประโยค: Yesterday, I …';
-    } else {
-      lab.textContent = 'คำกริยา (ช่อง 1)'; wd.textContent = words[current].b;
-      v2.textContent = words[current].v; v2.classList.remove('dim');
-      ru.textContent = words[current].r; ru.hidden = false; hint.textContent = '';
-    }
-    var m = $('main'); m.disabled = false;
-    if (state === 'idle') m.textContent = 'หมุนวงล้อ';
-    else if (state === 'spinning') { m.textContent = 'กำลังหมุน…'; m.disabled = true; }
-    else if (state === 'landed') m.textContent = 'เฉลย V.2';
-    else m.textContent = used.size >= words.length ? 'ครบแล้ว · เริ่มรอบใหม่' : 'หมุนอีกครั้ง';
-  }
-  function resetRound() {
-    used.clear(); state = 'idle'; current = -1; winner = -1;
-    updateCard(); updateStatus(); draw();
-  }
-  function setWords(list, key) {
-    words = list.map(function (p) { return { b: p[0], v: p[1], r: rule(p[0], p[1]) }; });
-    activeSet = key;
-    document.querySelectorAll('.sets button').forEach(function (b) {
-      b.setAttribute('aria-pressed', String(b.getAttribute('data-set') === key));
-    });
-    $('wordsInput').value = words.map(function (w) { return w.b + ', ' + w.v; }).join('\n');
-    resetRound();
-  }
-  function shuffle(arr) {
-    var a = arr.slice();
-    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
-    return a;
-  }
-
-  /* ---------- spin ---------- */
-  function mod(x, m) { return ((x % m) + m) % m; }
-  function sliceAt(r) { return Math.floor(mod(-Math.PI / 2 - r, TAU) / (TAU / words.length)); }
+  /* ---- flow: idle -> spinning -> landed -> revealed -> award -> idle ---- */
   function spin() {
-    var avail = [];
-    for (var i = 0; i < words.length; i++) if (!used.has(i)) avail.push(i);
-    if (!avail.length) return;
-    audio(); keepAwake();
-    var target = avail[Math.floor(Math.random() * avail.length)], n = words.length, a = TAU / n;
-    var finalRot = -Math.PI / 2 - (target + 0.5) * a + (Math.random() - 0.5) * a * 0.6;
-    var start = rot, total = mod(finalRot - start, TAU) + TAU * (5 + Math.floor(Math.random() * 3));
-    var dur = reduce ? 700 : 4400, t0 = performance.now(), last = sliceAt(rot);
-    winner = -1; state = 'spinning'; updateCard(); draw();
-    function frame(now) {
-      var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 4);
-      rot = start + total * e;
-      var s = sliceAt(rot);
-      if (s !== last) { last = s; if (now - lastTick > 55) { lastTick = now; tone(1000, 0.03, 'square', 0.03); } }
-      if (p < 1) { draw(); requestAnimationFrame(frame); }
-      else {
-        rot = mod(rot, TAU); current = target; winner = target; used.add(target); state = 'landed';
-        tone(520, 0.14, 'triangle', 0.12); tone(780, 0.22, 'triangle', 0.12, 0.12);
-        updateCard(); updateStatus(); draw();
-      }
-    }
-    requestAnimationFrame(frame);
+    if (S.st !== 'idle') return;
+    if (S.used.length >= n) { S.used = []; S.idx = -1; render(); return; }
+    keepAwake();
+    var avail = []; for (var i = 0; i < n; i++) if (S.used.indexOf(i) < 0) avail.push(i);
+    var target = avail[Math.floor(Math.random() * avail.length)];
+    var want = 270 - (target + 0.5) * a + (Math.random() - 0.5) * a * 0.6;
+    var delta = ((want - S.rot) % 360 + 360) % 360 + 360 * (5 + Math.floor(Math.random() * 3));
+    S.st = 'spinning'; S.idx = target; S.rot += delta; S.faceRot -= 360 * 8;
+    $('spinner').style.transition = 'transform 4400ms cubic-bezier(.12,.6,.15,1)';
+    $('spinner').style.transform = 'rotate(' + S.rot + 'deg)';
+    $('facewrap').style.transition = 'transform 6200ms cubic-bezier(.2,.55,.25,1)';
+    $('facewrap').style.transform = 'rotate(' + S.faceRot + 'deg)';
+    render();
+    later(function () {
+      S.used.push(target);
+      var w = WORDS[target];
+      $('word').textContent = w[0]; $('word').style.fontSize = sizeFor(w[0], 120) + 'px';
+      $('v2').textContent = w[1]; $('v2').style.fontSize = sizeFor(w[1], 86) + 'px';
+      $('rule').textContent = rule(w[0], w[1]);
+      S.st = 'landed'; render();
+    }, 4500);
   }
-  function reveal() {
-    audio(); state = 'revealed'; tone(660, 0.12, 'sine', 0.12); tone(990, 0.2, 'sine', 0.1, 0.1); updateCard();
+  function reveal() { if (S.st === 'landed') { S.st = 'revealed'; render(); } }
+  function pick(i) {
+    if (S.st !== 'award' || S.locked) return;
+    S.locked = true; S.scores[i] += 1; render();
+    later(function () { S.locked = false; S.st = 'idle'; render(); }, 750);
   }
-  function primary() {
-    if (state === 'spinning') return;
-    if (state === 'landed') { reveal(); return; }
-    if (state === 'revealed' && used.size >= words.length) { resetRound(); return; }
-    spin();
-  }
-
-  /* ---------- teams ---------- */
-  function renderTeams() {
-    $('teams').innerHTML = teams.map(function (t, i) {
-      return '<div class="team" style="--tc:' + TEAM_COL[i] + '">' +
-        '<input id="team-name-' + i + '" data-team="' + i + '" value="' + t.n + '" maxlength="16" aria-label="ชื่อทีม ' + (i + 1) + '">' +
-        '<div class="score-row">' +
-        '<button type="button" class="step" data-team="' + i + '" data-d="-1" aria-label="ลดคะแนน ' + t.n + '">−</button>' +
-        '<span class="score" id="score-' + i + '">' + t.s + '</span>' +
-        '<button type="button" class="step" data-team="' + i + '" data-d="1" aria-label="เพิ่มคะแนน ' + t.n + '">+</button>' +
-        '</div></div>';
-    }).join('');
-  }
-  $('teams').addEventListener('click', function (e) {
-    var b = e.target.closest('.step'); if (!b) return;
-    var i = +b.getAttribute('data-team'), d = +b.getAttribute('data-d');
-    teams[i].s = Math.max(0, teams[i].s + d);
-    $('score-' + i).textContent = teams[i].s;
-    if (d > 0) { audio(); tone(880, 0.1, 'sine', 0.1); }
-  });
-  $('teams').addEventListener('input', function (e) {
-    var t = e.target; if (t.tagName !== 'INPUT') return;
-    teams[+t.getAttribute('data-team')].n = t.value;
-  });
-
-  /* ---------- editor sheet ---------- */
-  function openEditor() { $('editorMsg').textContent = ''; $('editor').hidden = false; $('closeBtn').focus(); }
-  function closeEditor() { $('editor').hidden = true; }
-  function parse(text) {
-    var out = [], lines = text.split('\n');
-    for (var i = 0; i < lines.length; i++) {
-      var s = lines[i].trim(); if (!s) continue;
-      var p = s.split(/[,=\t]/).map(function (x) { return x.trim(); }).filter(Boolean);
-      if (p.length < 2) return { err: 'บรรทัดนี้ยังไม่ครบ: ' + s };
-      out.push([p[0].toLowerCase(), p[1].toLowerCase()]);
-    }
-    if (out.length < 4) return { err: 'ใส่อย่างน้อย 4 คำ' };
-    if (out.length > 16) return { err: 'ใส่ได้ไม่เกิน 16 คำ' };
-    return { list: out };
-  }
-  function loadCustom() {
-    try { var raw = localStorage.getItem('wheelv2.custom'); if (raw) { var r = parse(raw); if (r.list) return r.list; } } catch (e) {}
-    return null;
-  }
-  $('applyBtn').addEventListener('click', function () {
-    var r = parse($('wordsInput').value);
-    if (r.err) { $('editorMsg').textContent = r.err; return; }
-    try { localStorage.setItem('wheelv2.custom', $('wordsInput').value); } catch (e) {}
-    setWords(r.list, 'custom'); closeEditor();
-  });
-  $('closeBtn').addEventListener('click', closeEditor);
-  $('editor').addEventListener('click', function (e) { if (e.target === this) closeEditor(); });
-  $('editBtn').addEventListener('click', openEditor);
-
-  /* ---------- wiring ---------- */
-  document.querySelector('.sets').addEventListener('click', function (e) {
-    var b = e.target.closest('button'); if (!b) return;
-    var k = b.getAttribute('data-set');
-    if (k === 'irregular') setWords(IRREGULAR, k);
-    else if (k === 'regular') setWords(REGULAR, k);
-    else if (k === 'mixed') setWords(shuffle(POOL_REG).slice(0, 6).concat(shuffle(POOL_IRR).slice(0, 6)), k);
-    else { var c = loadCustom(); if (c) setWords(c, k); else setWords(words.map(function (w) { return [w.b, w.v]; }), k); openEditor(); }
-  });
-  $('main').addEventListener('click', primary);
-  canvas.addEventListener('click', primary);
-  $('resetBtn').addEventListener('click', resetRound);
-  $('scoreResetBtn').addEventListener('click', function () {
-    teams.forEach(function (t, i) { t.s = 0; $('score-' + i).textContent = 0; });
-  });
-  $('soundBtn').addEventListener('click', function () {
-    soundOn = !soundOn; this.setAttribute('aria-pressed', String(soundOn)); this.textContent = 'เสียง: ' + (soundOn ? 'เปิด' : 'ปิด');
+  $('wheel').addEventListener('click', function (e) { e.stopPropagation(); spin(); });
+  $('wheel').addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); spin(); } });
+  $('revealBtn').addEventListener('click', function (e) { e.stopPropagation(); reveal(); });
+  $('skipBtn').addEventListener('click', function (e) { e.stopPropagation(); if (S.st === 'award') { S.st = 'idle'; render(); } });
+  $('backLink').addEventListener('click', function (e) { e.stopPropagation(); });
+  stage.addEventListener('click', function () { if (S.st === 'revealed') { S.st = 'award'; render(); } });
+  $('themeBtn').addEventListener('click', function (e) {
+    e.stopPropagation(); S.theme = S.theme === 'light' ? 'dark' : 'light';
+    try { localStorage.setItem('wheelv2.theme', S.theme); } catch (x) {}
+    render();
   });
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && !$('editor').hidden) { closeEditor(); return; }
+    if (e.target && e.target.closest && e.target.closest('button, a, [role="button"]')) return;
     if (e.code !== 'Space' && e.key !== 'Enter') return;
-    if (!$('editor').hidden) return;
-    if (e.target.closest && e.target.closest('input, textarea, button')) return;
-    e.preventDefault(); primary();
+    e.preventDefault();
+    if (S.st === 'idle') spin(); else if (S.st === 'landed') reveal(); else if (S.st === 'revealed') { S.st = 'award'; render(); }
   });
-  if (window.ResizeObserver) new ResizeObserver(resize).observe(wrap); else window.addEventListener('resize', resize);
-  window.addEventListener('orientationchange', function () { setTimeout(resize, 250); });
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', refreshColors);
-  new MutationObserver(refreshColors).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-  if (document.fonts) { document.fonts.load('700 20px "FC Vision"').then(draw, function () {}); document.fonts.ready.then(draw); }
 
-  renderTeams();
-  refreshColors();
-  setWords(IRREGULAR, 'irregular');
-  resize();
+  try { var t = localStorage.getItem('wheelv2.theme'); if (t === 'light' || t === 'dark') S.theme = t; } catch (e) {}
+  render();
+  window.__wheel = S; /* handy for testing */
 })();
 </script>
 </body>
