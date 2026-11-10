@@ -244,7 +244,7 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
   $('revealBtn').addEventListener('click', function (e) { e.stopPropagation(); reveal(); });
   $('skipBtn').addEventListener('click', function (e) { e.stopPropagation(); if (S.st === 'award') { S.st = 'idle'; render(); } });
   $('backLink').addEventListener('click', function (e) { e.stopPropagation(); });
-  stage.addEventListener('click', function () { if (S.st === 'revealed') { S.st = 'award'; render(); } });
+  document.documentElement.addEventListener('click', function () { if (S.st === 'revealed') { S.st = 'award'; render(); } });
   $('themeBtn').addEventListener('click', function (e) {
     e.stopPropagation(); S.theme = S.theme === 'light' ? 'dark' : 'light';
     try { localStorage.setItem('wheelv2.theme', S.theme); } catch (x) {}
