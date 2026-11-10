@@ -134,8 +134,9 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
 (function () {
   var $ = function (id) { return document.getElementById(id); };
   var stage = $('stage'), root = document.documentElement;
-  var WORDS = [['buy','bought'],['find','found'],['go','went'],['see','saw'],['fly','flew'],['meet','met'],
-    ['break','broke'],['win','won'],['take','took'],['run','ran'],['leave','left'],['build','built']];
+  var WORDS = [['go','went'],['walk','walked'],['see','saw'],['love','loved'],['buy','bought'],['play','played'],['find','found'],
+    ['stop','stopped'],['take','took'],['cook','cooked'],['win','won'],['deny','denied'],['run','ran'],['hope','hoped'],
+    ['meet','met'],['stay','stayed'],['fly','flew'],['plan','planned'],['break','broke'],['listen','listened']];
   var NAMES = ['ทีม 1', 'ทีม 2', 'ทีม 3', 'ทีม 4'];
   var TB = ['#6B46C1', '#D9488F', '#1B8F7B', '#F2B33D'], TF = ['#FFFFFF', '#FFFFFF', '#FFFFFF', '#2A1B4D'];
   var PAL = [['#6B46C1','#FFFFFF'],['#D9488F','#FFFFFF'],['#F2B33D','#2A1B4D'],['#1B8F7B','#FFFFFF'],['#3B6FD8','#FFFFFF'],['#E4573D','#FFFFFF']];
@@ -173,7 +174,7 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
     var d = document.createElement('div');
     d.className = 'lbl'; d.textContent = w[0];
     d.style.transform = 'rotate(' + ((i + 0.5) * a).toFixed(2) + 'deg)';
-    d.style.fontSize = Math.round(Math.min(28, Math.max(14, 118 / (w[0].length * 0.6))) * 1.4) + 'px';
+    d.style.fontSize = Math.round(Math.min(n > 14 ? 21 : 28, Math.max(13, 118 / (w[0].length * 0.6))) * 1.4) + 'px';
     $('labels').appendChild(d); lblEls.push(d);
   });
 
