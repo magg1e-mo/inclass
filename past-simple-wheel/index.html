@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="th" data-theme="dark">
+<html lang="th" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -69,6 +69,7 @@ button:focus-visible { outline: 3px solid var(--muted); outline-offset: 3px; }
 .team-btn { cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 10px; min-height: 76px; padding: 10px 20px; border: 0; border-radius: 18px; font-weight: 700; font-size: 26px; }
 .team-btn .ts { font-size: 32px; }
 .skip { margin-top: 10px; min-height: 48px; background: none; border: 0; color: var(--muted); cursor: pointer; font-size: 18px; text-decoration: underline; text-underline-offset: 3px; }
+.turn { position: absolute; left: 0; top: 28px; width: 1180px; text-align: center; font-size: 36px; font-weight: 400; line-height: 1.2; pointer-events: none; }
 .scores { position: absolute; left: 0; right: 0; bottom: 22px; display: flex; justify-content: center; gap: 36px; color: var(--muted); font-size: 20px; transition: opacity .3s; }
 .scores b { color: var(--fg); font-size: 26px; margin-left: 6px; }
 .stage[data-s="landed"] .scores, .stage[data-s="revealed"] .scores, .stage[data-s="award"] .scores { opacity: 0; }
@@ -133,6 +134,7 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
   </div>
 </div>
 
+<div class="turn" id="turn"></div>
 <div class="scores" id="scores"></div>
 </div>
 
@@ -146,8 +148,8 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
   var TB = ['#6B46C1', '#D9488F', '#1B8F7B', '#F2B33D'], TF = ['#FFFFFF', '#FFFFFF', '#FFFFFF', '#2A1B4D'];
   var PAL = [['#6B46C1','#FFFFFF'],['#D9488F','#FFFFFF'],['#F2B33D','#2A1B4D'],['#1B8F7B','#FFFFFF'],['#3B6FD8','#FFFFFF'],['#E4573D','#FFFFFF']];
   var R = 196, n = WORDS.length, a = 360 / n;
-  var S = { st: 'idle', rot: 0, idx: -1, used: [], scores: [0,0,0,0], locked: false, faceRot: 0, theme: 'dark', face: '1', shake: 0 };
-  var timers = [];
+  var S = { st: 'idle', rot: 0, idx: -1, used: [], scores: [0,0,0,0], locked: false, faceRot: 0, theme: 'light', face: '1', shake: 0 };
+  var timers = [], n4 = 4;
 
   function rule(b, v) {
     if (v === b + 'ed') return 'เติม -ed';
@@ -197,6 +199,8 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
     stage.setAttribute('data-f', S.st === 'idle' ? 'z' : S.face);
     stage.setAttribute('data-shake', S.shake);
     $('disc').setAttribute('fill', bgCol);
+    var ti = (S.st === 'idle' || S.st === 'spinning') ? S.used.length % n4 : (S.used.length - 1 + n4) % n4;
+    $('turn').textContent = 'Team ' + (ti + 1);
     var landed = S.st !== 'idle' && S.st !== 'spinning';
     WORDS.forEach(function (w, i) {
       var ci = i % PAL.length; if (i === n - 1 && ci === 0) ci = 2;
@@ -268,7 +272,7 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
   document.documentElement.addEventListener('click', function () { if (S.st === 'revealed') { S.st = 'award'; render(); } });
   $('themeBtn').addEventListener('click', function (e) {
     e.stopPropagation(); S.theme = S.theme === 'light' ? 'dark' : 'light';
-    try { localStorage.setItem('wheelv2.theme', S.theme); } catch (x) {}
+    try { localStorage.setItem('wheelv3.theme', S.theme); } catch (x) {}
     render();
   });
   document.addEventListener('keydown', function (e) {
@@ -278,7 +282,7 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
     if (S.st === 'idle') spin(); else if (S.st === 'landed') reveal(); else if (S.st === 'revealed') { S.st = 'award'; render(); }
   });
 
-  try { var t = localStorage.getItem('wheelv2.theme'); if (t === 'light' || t === 'dark') S.theme = t; } catch (e) {}
+  try { var t = localStorage.getItem('wheelv3.theme'); if (t === 'light' || t === 'dark') S.theme = t; } catch (e) {}
   render();
   window.__wheel = S; /* handy for testing */
 })();
