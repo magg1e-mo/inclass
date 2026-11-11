@@ -141,9 +141,6 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
 @keyframes d_chin { from { opacity: 0; transform: translateX(-16px); } to { opacity: 1; transform: none; } }
 .deck .typ[data-r] { opacity: 1; transform: none; transition: none; }
 .deck .typ[data-r].shown { visibility: visible; }
-.deck .hint { position: absolute; left: 0; right: 0; bottom: 70px; text-align: center; font-size: 22px; color: var(--muted); opacity: 0; transition: opacity .4s; pointer-events: none; }
-.deck[data-i="0"] .hint { opacity: .9; }
-.deck .foot { position: absolute; left: 0; right: 0; bottom: 30px; text-align: center; font-size: 20px; color: var(--muted); letter-spacing: .08em; pointer-events: none; }
 .deck .bar { position: absolute; left: 0; bottom: 0; height: 5px; background: var(--pu); transition: width .3s; }
 .deck { position: absolute; inset: 0; display: none; }
 .stage[data-s="deck"] .deck { display: block; }
@@ -220,8 +217,6 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
 
 <div class="deck" id="deck" data-i="0">
   <div id="slides"></div>
-  <div class="hint">แตะครึ่งขวา = ต่อไป · แตะครึ่งซ้าย = ย้อนกลับ</div>
-  <div class="foot" id="foot"></div>
   <div class="bar" id="bar"></div>
 </div>
 <div class="results" id="results"></div>
@@ -440,7 +435,6 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
     Array.prototype.forEach.call(d.querySelectorAll('[data-r]'), function (e) { e.classList.toggle('shown', +e.getAttribute('data-r') <= D.st); });
     Array.prototype.forEach.call(d.querySelectorAll('[data-g]'), function (e) { e.classList.toggle('gone', +e.getAttribute('data-g') <= D.st); });
     $('deck').setAttribute('data-i', D.i);
-    $('foot').textContent = (D.i + 1) + ' / ' + SN;
     $('bar').style.width = ((D.i + 1) / SN * 100) + '%';
     try { history.replaceState(null, '', '#' + (D.i + 1)); } catch (e) {}
   }
