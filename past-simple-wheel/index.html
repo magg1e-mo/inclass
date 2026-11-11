@@ -107,6 +107,10 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
 .deck .schip { display: inline-block; border: 2px solid var(--tm); border-radius: 999px; padding: 4px 22px; font-size: 28px; color: var(--tm); font-weight: 700; }
 .deck .chips { display: flex; flex-wrap: wrap; gap: 12px; }
 .deck .row { display: flex; align-items: center; gap: 24px; }
+.deck .frow { appearance: none; -webkit-appearance: none; width: 100%; background: none; border: 2px solid transparent; border-radius: 14px; padding: 8px 14px; font: inherit; color: inherit; text-align: left; cursor: pointer; transition: background .2s, border-color .2s; }
+.deck .frow.on { border-color: var(--ad); background: color-mix(in srgb, var(--ad) 10%, transparent); }
+.deck .frow.on .fw { color: var(--ad); }
+.deck .fth.swap { animation: d_ansin .35s ease both; }
 .deck .big { display: flex; align-items: center; gap: 24px; font-size: 104px; font-weight: 700; line-height: 1.1; }
 .deck .big .w1 { width: 420px; text-align: center; }
 .deck .big .ar { color: var(--muted); font-weight: 400; }
@@ -254,7 +258,15 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
   ['gesturestart', 'gesturechange', 'gestureend'].forEach(function (g) { document.addEventListener(g, function (e) { e.preventDefault(); }, { passive: false }); });
   document.addEventListener('touchmove', function (e) { if (e.touches.length > 1 || (e.scale && e.scale !== 1)) e.preventDefault(); }, { passive: false });
   var lastTouch = 0;
-  document.addEventListener('touchend', function (e) { var t = Date.now(); if (t - lastTouch < 350) e.preventDefault(); lastTouch = t; }, { passive: false });
+  document.addEventListener('touchend', function (e) {
+    var t = Date.now();
+    if (t - lastTouch < 350) {
+      e.preventDefault(); /* stops double-tap zoom, but also eats the click, so replay it */
+      var c = e.changedTouches && e.changedTouches[0];
+      if (c && e.touches.length === 0 && e.target && e.target.dispatchEvent) e.target.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, clientX: c.clientX, clientY: c.clientY }));
+    }
+    lastTouch = t;
+  }, { passive: false });
 
   function fit() {
     var inset = 0;
@@ -338,7 +350,16 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
     var k = Math.floor(i / 2);
     irrHtml += '<div class="big irr"><span class="iw" data-r="' + (2 + 2 * k) + '">' + p[0] + '</span><span class="ar" data-r="' + (3 + 2 * k) + '">→</span><span class="gv" data-r="' + (3 + 2 * k) + '">' + p[1] + '</span></div>';
   });
-  var FREQ = [['Always','เสมอ','100%'],['Usually','ปกติ','90%'],['Often','บ่อยๆ','70–80%'],['Sometimes','บางครั้ง','50%','ad'],['Seldom','นานๆ ครั้ง','10–20%'],['Never','ไม่เคย','0%']];
+  var FREQ = [['Always','เสมอ','100%'],['Usually','ปกติ','90%'],['Often','บ่อยๆ','70–80%'],['Sometimes','บางครั้ง','50%'],['Seldom','นานๆ ครั้ง','10–20%'],['Never','ไม่เคย','0%']];
+  var FTH = [
+    ['เมื่อก่อนฉันไปเยี่ยมปู่ย่าตายาย', 'เสมอ', 'ในวันหยุดสุดสัปดาห์'],
+    ['เมื่อก่อน', 'ปกติ', 'ฉันไปเยี่ยมปู่ย่าตายายในวันหยุดสุดสัปดาห์'],
+    ['เมื่อก่อนฉันไปเยี่ยมปู่ย่าตายาย', 'บ่อยๆ', 'ในวันหยุดสุดสัปดาห์'],
+    ['เมื่อก่อน', 'บางครั้ง', 'ฉันไปเยี่ยมปู่ย่าตายายในวันหยุดสุดสัปดาห์'],
+    ['เมื่อก่อนฉันไปเยี่ยมปู่ย่าตายาย', 'นานๆ ครั้ง', 'ในวันหยุดสุดสัปดาห์'],
+    ['เมื่อก่อนฉัน', 'ไม่เคย', 'ไปเยี่ยมปู่ย่าตายายในวันหยุดสุดสัปดาห์']
+  ];
+  function fthHtml(i) { var t = FTH[i]; return t[0] + '<span class="ad">' + t[1] + '</span>' + t[2]; }
 
   var SLIDES = [
     '<div class="center"><h1 class="h title">Past Simple Tense</h1><p class="sub" data-r="1">เหตุการณ์ที่จบไปแล้วในอดีต</p></div>',
@@ -352,9 +373,11 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
     '<p class="kick">การใช้ที่ 2</p>' + head(1, 'สิ่งที่ทำ<span class="gv">เป็นประจำ</span>ในอดีต') +
     '<p class="sub" data-r="2">และตอนนี้ไม่ได้ทำแล้ว · มักมี Adverb of Frequency</p>' +
     '<div style="display:flex;gap:40px;align-items:flex-start;margin-top:6px">' +
-    '<p class="sent" data-r="3" style="flex:1;font-size:42px">I <span class="ad">sometimes</span> ' + sw('visit', 'visited', 'gv', 4) + ' my grandparents on weekends.</p>' +
-    '<div class="card" data-r="5" style="width:440px;display:flex;flex-direction:column;gap:10px;font-size:27px;padding:22px 28px;white-space:nowrap">' +
-    FREQ.map(function (f) { return '<div class="row"><span style="width:130px;font-weight:700' + (f[3] ? ';color:var(--ad)' : '') + '">' + f[0] + '</span><span style="flex:1;color:var(--muted)">' + f[1] + '</span><span>' + f[2] + '</span></div>'; }).join('') + '</div></div>',
+    '<div style="flex:1;display:flex;flex-direction:column;gap:16px">' +
+    '<p class="sent" data-r="3" style="font-size:42px;min-height:166px">I <span class="ad advw">sometimes</span> ' + sw('visit', 'visited', 'gv', 4) + ' my grandparents on weekends.</p>' +
+    '<p class="sub fth" data-r="4" style="font-size:30px;line-height:1.5">' + fthHtml(3) + '</p></div>' +
+    '<div class="card" data-r="5" style="width:440px;display:flex;flex-direction:column;gap:4px;font-size:27px;padding:18px 20px;white-space:nowrap">' +
+    FREQ.map(function (f, i) { return '<button type="button" class="row frow' + (i === 3 ? ' on' : '') + '" data-f="' + i + '"><span class="fw" style="width:130px;font-weight:700">' + f[0] + '</span><span style="flex:1;color:var(--muted)">' + f[1] + '</span><span>' + f[2] + '</span></button>'; }).join('') + '</div></div>',
 
     '<p class="kick">ตำแหน่งของ Adverb of Frequency</p>' + head(1, 'Adverb อยู่ตรงไหน ?') +
     '<div style="margin-top:10px"><p class="sent" data-r="2">She <span class="ad">always</span> <span class="gv">walked</span> to school last year.</p>' +
@@ -428,6 +451,25 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
     Array.prototype.forEach.call(d.querySelectorAll('.sent:not(.notype)'), typify);
     var m = 0; Array.prototype.forEach.call(d.querySelectorAll('[data-r]'), function (e) { m = Math.max(m, +e.getAttribute('data-r')); }); steps.push(m);
   });
+  /* adverb picker on slide 3: tap a row -> swap the word in the sentence + the Thai line */
+  (function () {
+    var advw = host.querySelector('.advw'), fth = host.querySelector('.fth');
+    var rows = host.querySelectorAll('.frow');
+    Array.prototype.forEach.call(rows, function (b) {
+      b.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var i = +b.getAttribute('data-f');
+        Array.prototype.forEach.call(rows, function (x) { x.classList.toggle('on', x === b); });
+        advw.textContent = '';
+        var w = document.createElement('span'); w.className = 'wd';
+        Array.from(FREQ[i][0].toLowerCase()).forEach(function (c, k) { var sp = document.createElement('span'); sp.className = 'ch'; sp.style.setProperty('--i', k); sp.textContent = c; w.appendChild(sp); });
+        advw.appendChild(w);
+        fth.innerHTML = fthHtml(i);
+        fth.classList.remove('swap'); void fth.offsetWidth; fth.classList.add('swap');
+        b.blur();
+      });
+    });
+  })();
   var D = { i: 0, st: 0 };
   function drender() {
     els.forEach(function (d, k) { d.classList.toggle('on', k === D.i); });
