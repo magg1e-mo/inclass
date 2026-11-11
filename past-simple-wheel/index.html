@@ -82,6 +82,7 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
 </style>
 </head>
 <body>
+<div id="safeTop" style="position:fixed;left:0;top:0;width:0;height:env(safe-area-inset-top,0px);pointer-events:none"></div>
 <div class="stage" id="stage" data-s="idle">
 
 <a class="back" href="../" id="backLink">← สื่อทั้งหมด</a>
@@ -161,7 +162,11 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
 
   /* ---- scale the fixed 1180x820 stage to the screen ---- */
   function fit() {
-    var s = Math.min(window.innerWidth / 1180, window.innerHeight / 820);
+    var inset = 0;
+    try { inset = $('safeTop').getBoundingClientRect().height || 0; } catch (e) {}
+    var h = Math.max(200, window.innerHeight - inset);
+    var s = Math.min(window.innerWidth / 1180, h / 820);
+    stage.style.top = (inset + h / 2) + 'px';
     stage.style.transform = 'translate(-50%, -50%) scale(' + s + ')';
   }
   window.addEventListener('resize', fit);
