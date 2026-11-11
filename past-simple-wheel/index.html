@@ -103,7 +103,7 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
 .deck .gv { color: var(--v2); font-weight: 700; } .tm { color: var(--tm); font-weight: 700; } .ad { color: var(--ad); font-weight: 700; } .ng { color: var(--ng); font-weight: 700; } .pu { color: var(--pu); font-weight: 700; }
 .deck .card { background: var(--card); border: 2px solid var(--line); border-radius: 24px; padding: 28px 32px; }
 .deck .card.tight { padding: 16px 30px; }
-.deck .lbl { margin: 0 0 6px; font-size: 28px; color: var(--muted); }
+.deck .dlbl { margin: 0 0 6px; font-size: 28px; color: var(--muted); }
 .deck .schip { display: inline-block; border: 2px solid var(--tm); border-radius: 999px; padding: 4px 22px; font-size: 28px; color: var(--tm); font-weight: 700; }
 .deck .chips { display: flex; flex-wrap: wrap; gap: 12px; }
 .deck .row { display: flex; align-items: center; gap: 24px; }
@@ -378,9 +378,9 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
 
     '<p class="kick">3 รูปประโยค · V.inf = กริยาที่ไม่ผัน</p>' + head(1, 'บอกเล่า · ปฏิเสธ · คำถาม') +
     '<div style="display:flex;flex-direction:column;gap:14px">' +
-    '<div class="card tight" data-r="2"><p class="lbl">บอกเล่า &nbsp; <b class="fg">S + <span class="gv">V.2</span></b></p><p class="sent s40">She <span class="gv">ate</span> fried eggs for breakfast.</p></div>' +
-    '<div class="card tight" data-r="3"><p class="lbl">ปฏิเสธ &nbsp; <b class="fg">S + <span class="ng">did not</span> + V.inf</b></p><p class="sent s40">She <span class="ng">didn’t eat</span> fried eggs for breakfast.</p></div>' +
-    '<div class="card tight" data-r="4"><p class="lbl">คำถาม &nbsp; <b class="fg"><span class="tm">Did</span> + S + V.inf ?</b></p><p class="sent s40"><span class="tm">Did</span> she <span class="tm">eat</span> fried eggs for breakfast?</p></div></div>',
+    '<div class="card tight" data-r="2"><p class="dlbl">บอกเล่า &nbsp; <b class="fg">S + <span class="gv">V.2</span></b></p><p class="sent s40">She <span class="gv">ate</span> fried eggs for breakfast.</p></div>' +
+    '<div class="card tight" data-r="3"><p class="dlbl">ปฏิเสธ &nbsp; <b class="fg">S + <span class="ng">did not</span> + V.inf</b></p><p class="sent s40">She <span class="ng">didn’t eat</span> fried eggs for breakfast.</p></div>' +
+    '<div class="card tight" data-r="4"><p class="dlbl">คำถาม &nbsp; <b class="fg"><span class="tm">Did</span> + S + V.inf ?</b></p><p class="sent s40"><span class="tm">Did</span> she <span class="tm">eat</span> fried eggs for breakfast?</p></div></div>',
 
     '<p class="kick">ประโยคปฏิเสธ</p>' + head(1, 'เติม <span class="ng">did not</span> หน้ากริยาแท้') +
     '<p class="sent" data-r="2" style="margin-top:8px">He <span class="ng">did not finish</span> his homework before dinner.</p>' +
