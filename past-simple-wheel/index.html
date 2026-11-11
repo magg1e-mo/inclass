@@ -21,8 +21,8 @@
 @font-face { font-family: 'FC Vision'; font-weight: 400; font-style: normal; font-display: swap; src: url('../fonts/FCVision-Regular.woff2') format('woff2'); }
 @font-face { font-family: 'Inter Light'; font-weight: 300; font-style: normal; font-display: swap; src: url('../fonts/Inter-Light-team.woff2') format('woff2'); }
 @font-face { font-family: 'FC Vision'; font-weight: 700; font-style: normal; font-display: swap; src: url('../fonts/FCVision-Bold.woff2') format('woff2'); }
-html { --bg: #000000; --fg: #FFFFFF; --muted: #9A9AA6; --line: #3A3A44; --v2: #56AC6B; --shadow: rgba(0,0,0,.6); color-scheme: dark; }
-html[data-theme="light"] { --bg: #F6F3EE; --fg: #1B1530; --muted: #6B6580; --line: #CFC8DC; --v2: #2E8B4F; --shadow: rgba(27,21,48,.25); color-scheme: light; }
+html { --card: #15131F; --tm: #7FA3F0; --ad: #F07A5F; --ng: #E873AE; --pu: #A98BFF; --bg: #000000; --fg: #FFFFFF; --muted: #9A9AA6; --line: #3A3A44; --v2: #56AC6B; --shadow: rgba(0,0,0,.6); color-scheme: dark; }
+html[data-theme="light"] { --card: #FFFFFF; --tm: #3B6FD8; --ad: #D8482C; --ng: #C93A82; --pu: #6B46C1; --bg: #F6F3EE; --fg: #1B1530; --muted: #6B6580; --line: #CFC8DC; --v2: #2E8B4F; --shadow: rgba(27,21,48,.25); color-scheme: light; }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 html, body { margin: 0; height: 100%; }
@@ -92,6 +92,55 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
 .back { position: absolute; left: 24px; top: 70px; z-index: 5; color: var(--muted); text-decoration: none; font-size: 18px; padding: 8px 4px; opacity: .8; }
 .stage:not([data-s="idle"]):not([data-s="start"]) .back { opacity: 0; pointer-events: none; }
 @media (prefers-reduced-motion: reduce) { .stage, .stage * { animation: none !important; } }
+/* slides */
+.deck .slide { position: absolute; left: 96px; right: 96px; top: 130px; bottom: 90px; display: none; flex-direction: column; gap: 26px; }
+.deck .slide.on { display: flex; }
+.deck .kick { margin: 0; font-size: 26px; letter-spacing: .04em; color: var(--muted); }
+.deck .h { margin: 0; font-size: 64px; font-weight: 700; line-height: 1.15; }
+.deck .sub { margin: 0; font-size: 30px; color: var(--muted); }
+.deck .sent { margin: 0; font-size: 46px; line-height: 1.3; }
+.deck .gv { color: var(--v2); font-weight: 700; } .tm { color: var(--tm); font-weight: 700; } .ad { color: var(--ad); font-weight: 700; } .ng { color: var(--ng); font-weight: 700; } .pu { color: var(--pu); font-weight: 700; }
+.deck .card { background: var(--card); border: 2px solid var(--line); border-radius: 24px; padding: 28px 32px; }
+.deck .schip { display: inline-block; border: 2px solid var(--tm); border-radius: 999px; padding: 4px 22px; font-size: 28px; color: var(--tm); font-weight: 700; }
+.deck .row { display: flex; align-items: center; gap: 24px; }
+.deck .big { display: flex; align-items: center; gap: 24px; font-size: 104px; font-weight: 700; line-height: 1.1; }
+.deck .big .w1 { width: 420px; text-align: center; }
+.deck .big .ar { color: var(--muted); font-weight: 400; }
+.deck .rule { font-size: 34px; line-height: 1.45; }
+.deck .base { color: var(--muted); font-weight: 400; }
+.deck .fg { color: var(--fg); font-weight: 700; }
+
+/* reveal: guess first, tap to show */
+.deck [data-r] { opacity: 0; visibility: hidden; transform: translateY(14px); transition: opacity .35s, transform .35s, visibility 0s .35s; }
+.deck [data-r].shown { opacity: 1; visibility: visible; transform: none; transition: opacity .35s, transform .35s, visibility 0s; }
+.deck [data-g].gone { display: none; }
+/* result words fade in place (no slide) */
+.deck span[data-r] { transform: none; }
+
+.deck .foot { position: absolute; left: 0; right: 0; bottom: 30px; text-align: center; font-size: 20px; color: var(--muted); letter-spacing: .08em; pointer-events: none; }
+.deck .bar { position: absolute; left: 0; bottom: 0; height: 5px; background: var(--pu); transition: width .3s; }
+.deck .hint { position: absolute; left: 0; right: 0; bottom: 70px; text-align: center; font-size: 22px; color: var(--muted); opacity: 0; transition: opacity .4s; pointer-events: none; }
+.deck[data-i="0"] .hint { opacity: .9; }
+
+.deck { position: absolute; inset: 0; display: none; }
+.stage[data-s="deck"] .deck { display: block; }
+.stage[data-s="deck"] .wheel, .stage[data-s="deck"] .panel, .stage[data-s="deck"] .turn, .stage[data-s="deck"] .scores,
+.stage[data-s="results"] .wheel, .stage[data-s="results"] .panel, .stage[data-s="results"] .turn, .stage[data-s="results"] .scores { visibility: hidden; pointer-events: none; }
+.results { position: absolute; inset: 0; z-index: 3; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 30px; text-align: center; }
+.stage[data-s="results"] .results { display: flex; }
+.res-kick { margin: 0; font-size: 28px; color: var(--muted); letter-spacing: .06em; }
+.res-win { margin: 0; font-size: 104px; font-weight: 700; line-height: 1.1; animation: respop .7s cubic-bezier(.2,1.4,.4,1) both; }
+.res-sub { margin: 0; font-size: 36px; color: var(--muted); animation: resfade .6s ease .5s both; }
+.res-scores { display: flex; gap: 18px; margin-top: 18px; animation: resfade .6s ease .7s both; }
+.res-tile { min-width: 190px; padding: 16px 26px; border-radius: 20px; font-weight: 700; display: flex; flex-direction: column; gap: 2px; }
+.res-tile span { font-size: 26px; font-weight: 400; opacity: .9; }
+.res-tile b { font-size: 60px; line-height: 1.1; }
+.res-tile.lose { opacity: .55; }
+.res-tile.win { transform: scale(1.12); box-shadow: 0 8px 24px var(--shadow); }
+.res-hint { position: absolute; left: 0; right: 0; bottom: 40px; margin: 0; font-size: 22px; color: var(--muted); animation: resfade .6s ease 1.4s both; }
+@keyframes respop { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: none; } }
+@keyframes resfade { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+#confetti { position: absolute; left: 0; top: 0; width: 1180px; height: 820px; z-index: 4; pointer-events: none; }
 </style>
 </head>
 <body>
@@ -146,6 +195,14 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
   </div>
 </div>
 
+<div class="deck" id="deck" data-i="0">
+  <div id="slides"></div>
+  <div class="hint">แตะครึ่งขวา = ต่อไป · แตะครึ่งซ้าย = ย้อนกลับ</div>
+  <div class="foot" id="foot"></div>
+  <div class="bar" id="bar"></div>
+</div>
+<div class="results" id="results"></div>
+<canvas id="confetti" width="2360" height="1640" aria-hidden="true"></canvas>
 <div class="turn" id="turn"></div>
 <div class="start-screen"><div class="start-title">SPINT</div><button type="button" class="start-btn" id="startBtn">เริ่ม</button></div>
 <div class="scores" id="scores"></div>
@@ -236,6 +293,195 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
     $('teamGrid').appendChild(b);
   });
 
+
+  /* ================= slides (deck) ================= */
+  /* helpers: s(n, html) = appears at step n ; sw(base, ans, cls, n) = (base) becomes ans at step n */
+  function s(n, html, tag) { tag = tag || 'span'; return '<' + tag + ' data-r="' + n + '">' + html + '</' + tag + '>'; }
+  function sw(base, ans, cls, n) { return '<span data-g="' + n + '" class="base">(' + base + ')</span><span data-r="' + n + '" class="' + cls + '">' + ans + '</span>'; }
+  function sd(n, html, attr) { return '<div data-r="' + n + '" ' + (attr || '') + '>' + html + '</div>'; }
+
+  function edRule(num, w1, r1, w2, r2, rule) {
+    return { steps: 2, html:
+      '<p class="kick">หลักการเติม -ed · ข้อ ' + num + ' / 5</p>' +
+      '<div style="display:flex;flex-direction:column;gap:14px;margin-top:8px">' +
+      '<div class="big"><span class="w1">' + w1 + '</span><span class="ar" data-r="1">→</span><span data-r="1">' + r1 + '</span></div>' +
+      '<div class="big"><span class="w1">' + w2 + '</span><span class="ar" data-r="1">→</span><span data-r="1">' + r2 + '</span></div></div>' +
+      '<div class="card rule" data-r="2" style="margin-top:14px">' + rule + '</div>' };
+  }
+  var IRR = [['go','went'],['run','ran'],['see','saw'],['win','won'],['buy','bought'],['meet','met'],['take','took'],['fly','flew'],['find','found'],['break','broke']];
+  var irrHtml = '';
+  IRR.forEach(function (p, i) {
+    var n = Math.floor(i / 2) + 1;
+    irrHtml += '<div class="big" style="font-size:44px;padding:8px 0;border-bottom:2px solid var(--line)"><span style="width:190px">' + p[0] + '</span><span class="ar" data-r="' + n + '">→</span><span class="gv" data-r="' + n + '">' + p[1] + '</span></div>';
+  });
+
+  var SLIDES = [
+    { steps: 0, html:
+      '<div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:18px;margin-top:-20px">' +
+      '<h1 class="h" style="font-size:130px;line-height:1.05">Past Simple Tense</h1>' +
+      '<p class="sub">เหตุการณ์ที่จบไปแล้วในอดีต</p></div>' },
+
+    { steps: 2, html:
+      '<p class="kick">การใช้ที่ 1</p>' +
+      '<h2 class="h">เหตุการณ์ที่เกิดและ<span class="gv">จบแล้ว</span>ในอดีต</h2>' +
+      '<div style="display:flex;align-items:center;margin:10px 0 4px;font-size:24px;color:var(--muted)"><span style="white-space:nowrap">อดีต · Past</span>' +
+      '<div style="flex-grow:1;height:4px;background:var(--line);margin:0 18px;border-radius:2px"></div>' +
+      '<span style="width:22px;height:22px;border-radius:50%;background:var(--fg);display:inline-block"></span>' +
+      '<span style="margin-left:12px;white-space:nowrap;color:var(--fg)">ตอนนี้ · Now</span></div>' +
+      '<div style="display:flex;flex-wrap:wrap;gap:12px"><span class="schip">yesterday</span><span class="schip">last week</span><span class="schip">last month</span><span class="schip">last year</span><span class="schip">… ago</span><span class="schip">in 2005</span></div>' +
+      '<p class="sent">The concert ' + sw('start', 'started', 'gv', 1) + ' at 8:00 PM <span class="tm">last night</span>.</p>' +
+      '<p class="sent">He ' + sw('cook', 'cooked', 'gv', 2) + ' dinner for his family <span class="tm">yesterday</span>.</p>' },
+
+    { steps: 1, html:
+      '<p class="kick">การใช้ที่ 2</p>' +
+      '<h2 class="h">สิ่งที่ทำ<span class="gv">เป็นประจำ</span>ในอดีต</h2>' +
+      '<p class="sub">และตอนนี้ไม่ได้ทำแล้ว · มักมี Adverb of Frequency</p>' +
+      '<div style="display:flex;gap:40px;align-items:flex-start;margin-top:6px">' +
+      '<p class="sent" style="flex:1;font-size:42px">I <span class="ad">sometimes</span> ' + sw('visit', 'visited', 'gv', 1) + ' my grandparents on weekends.</p>' +
+      '<div class="card" style="width:440px;display:flex;flex-direction:column;gap:10px;font-size:27px;white-space:nowrap;padding:22px 28px">' +
+      [['Always','เสมอ','100%'],['Usually','ปกติ','90%'],['Often','บ่อยๆ','70–80%'],['Sometimes','บางครั้ง','50%','ad'],['Seldom','นานๆ ครั้ง','10–20%'],['Never','ไม่เคย','0%']].map(function (r) {
+        return '<div class="row"><span style="width:130px;font-weight:700' + (r[3] ? ';color:var(--ad)' : '') + '">' + r[0] + '</span><span style="flex:1;color:var(--muted)">' + r[1] + '</span><span>' + r[2] + '</span></div>';
+      }).join('') + '</div></div>' },
+
+    { steps: 2, html:
+      '<p class="kick">ตำแหน่งของ Adverb of Frequency</p>' +
+      '<h2 class="h">Adverb อยู่ตรงไหน ?</h2>' +
+      '<div style="margin-top:10px"><p class="sub" style="margin-bottom:8px;min-height:44px">' + s(1, '<span class="ad">อยู่หน้า</span> verb') + '</p>' +
+      '<p class="sent">She <span class="ad">always</span> <span class="gv">walked</span> to school last year.</p></div>' +
+      '<div style="margin-top:22px"><p class="sub" style="margin-bottom:8px;min-height:44px">' + s(2, '<span class="ad">อยู่หลัง</span> verb to be') + '</p>' +
+      '<p class="sent">We <span class="gv">were</span> <span class="ad">sometimes</span> late for class.</p></div>' },
+
+    { steps: 1, html:
+      '<p class="kick">Verb ช่อง 2 (V.2)</p>' +
+      '<h2 class="h">มี 2 ประเภท</h2>' +
+      '<div style="display:flex;gap:28px;margin-top:10px">' +
+      '<div class="card" style="flex:1;display:flex;flex-direction:column;gap:14px"><p style="margin:0;font-size:40px;font-weight:700;color:var(--pu)">Regular verb</p><p class="sub" style="color:var(--fg)">เติม <b>-ed</b> ได้เลย</p>' +
+      '<p class="sent gv" style="font-size:36px;min-height:140px" data-r="1">played<br>studied<br>walked</p></div>' +
+      '<div class="card" style="flex:1;display:flex;flex-direction:column;gap:14px"><p style="margin:0;font-size:40px;font-weight:700;color:var(--ng)">Irregular verb</p><p class="sub" style="color:var(--fg)">เปลี่ยนรูป หรือเหมือนกันทั้ง 3 ช่อง</p>' +
+      '<p class="sent gv" style="font-size:36px;min-height:140px" data-r="1">go – went – gone<br>cut – cut – cut</p></div></div>' },
+
+    edRule(1, 'walk', 'walk<span class="gv">ed</span>', 'cook', 'cook<span class="gv">ed</span>', 'กริยาทั่วไป เติม -ed ได้เลย'),
+    edRule(2, 'love', 'love<span class="gv">d</span>', 'hope', 'hope<span class="gv">d</span>', 'ลงท้ายด้วย e → เติม d ได้เลย'),
+    edRule(3, 'deny', 'den<span class="gv">ied</span>', 'modify', 'modif<span class="gv">ied</span>', 'ลงท้ายด้วย พยัญชนะ + y → เปลี่ยน y เป็น i แล้วเติม ed'),
+    edRule(4, 'play', 'play<span class="gv">ed</span>', 'stay', 'stay<span class="gv">ed</span>', 'ลงท้ายด้วย สระ + y → เติม ed ได้เลย'),
+    edRule(5, 'stop', 'stop<span class="gv">ped</span>', 'plan', 'plan<span class="gv">ned</span>', 'พยางค์เดียว สระตัวเดียว ลงท้ายพยัญชนะตัวเดียว → ซ้ำตัวท้ายอีก 1 ตัว แล้วเติม ed'),
+
+    { steps: 5, html:
+      '<p class="kick">Irregular verb</p>' +
+      '<h2 class="h">ไม่มีกฎ <span class="ng">ต้องจำ</span></h2>' +
+      '<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 56px;margin-top:6px">' + irrHtml + '</div>' },
+
+    { steps: 2, html:
+      '<p class="kick">3 รูปประโยค · V.inf = กริยาที่ไม่ผัน</p>' +
+      '<h2 class="h">บอกเล่า · ปฏิเสธ · คำถาม</h2>' +
+      '<div style="display:flex;flex-direction:column;gap:14px;margin-top:0">' +
+      '<div class="card" style="padding:16px 30px"><p style="margin:0 0 6px;font-size:28px;color:var(--muted)">บอกเล่า &nbsp; <b class="fg">S + <span class="gv">V.2</span></b></p><p class="sent" style="font-size:40px">She <span class="gv">ate</span> fried eggs for breakfast.</p></div>' +
+      '<div class="card" data-r="1" style="padding:16px 30px"><p style="margin:0 0 6px;font-size:28px;color:var(--muted)">ปฏิเสธ &nbsp; <b class="fg">S + <span class="ng">did not</span> + V.inf</b></p><p class="sent" style="font-size:40px">She <span class="ng">didn’t eat</span> fried eggs for breakfast.</p></div>' +
+      '<div class="card" data-r="2" style="padding:16px 30px"><p style="margin:0 0 6px;font-size:28px;color:var(--muted)">คำถาม &nbsp; <b class="fg"><span class="tm">Did</span> + S + V.inf ?</b></p><p class="sent" style="font-size:40px"><span class="tm">Did</span> she <span class="tm">eat</span> fried eggs for breakfast?</p></div></div>' },
+
+    { steps: 2, html:
+      '<p class="kick">ประโยคปฏิเสธ</p>' +
+      '<h2 class="h">เติม <span class="ng">did not</span> หน้ากริยาแท้</h2>' +
+      '<p class="sent" style="margin-top:8px">He <span class="ng">did not finish</span> his homework before dinner.</p>' +
+      '<p class="sub" data-r="1">did เป็นอดีตอยู่แล้ว → กริยาแท้กลับเป็น <b class="fg">V.inf</b></p>' +
+      '<div class="card" data-r="2" style="margin-top:10px"><p class="sub" style="font-size:28px;margin-bottom:8px">แต่ถ้าเป็น <b class="fg">was / were</b> → ใส่ not หลัง be ได้เลย</p>' +
+      '<p class="sent" style="font-size:40px">They <span class="ng">were not</span> at the park yesterday.</p></div>' },
+
+    { steps: 2, html:
+      '<p class="kick">ประโยคคำถาม</p>' +
+      '<h2 class="h">เติม <span class="tm">did</span> ไว้หน้าประโยค</h2>' +
+      '<p class="sent" style="margin-top:8px"><span class="tm">Did</span> they <span class="tm">watch</span> a movie together at the cinema on Saturday?</p>' +
+      '<p class="sub" data-r="1">did เป็นอดีตอยู่แล้ว → กริยาแท้กลับเป็น <b class="fg">V.inf</b></p>' +
+      '<div class="card" data-r="2" style="margin-top:10px"><p class="sub" style="font-size:28px;margin-bottom:8px">แต่ถ้าเป็น <b class="fg">was / were</b> → ยก be ไปไว้หน้าประโยค</p>' +
+      '<p class="sent" style="font-size:40px"><span class="tm">Was</span> he the captain of the soccer team?</p></div>' },
+
+    { steps: 1, html:
+      '<p class="kick">Verb to be ในอดีต</p>' +
+      '<h2 class="h"><span class="pu">Was</span> หรือ <span class="pu">Were</span> ?</h2>' +
+      '<div style="display:flex;gap:28px;margin-top:10px">' +
+      '<div class="card" style="flex:1"><p style="margin:0;font-size:56px;font-weight:700;color:var(--pu)">Was</p><p class="sub" style="color:var(--fg);margin-top:6px">ประธานเอกพจน์</p><p class="sent" style="font-size:32px;margin-top:12px">I / He / She / It</p></div>' +
+      '<div class="card" style="flex:1"><p style="margin:0;font-size:56px;font-weight:700;color:var(--pu)">Were</p><p class="sub" style="color:var(--fg);margin-top:6px">ประธานพหูพจน์</p><p class="sent" style="font-size:32px;margin-top:12px">You / We / They</p></div></div>' +
+      '<p class="h" data-r="1" style="font-size:56px;margin-top:14px">ลองทำใบงานกันเลย</p>' }
+  ];
+
+
+  var SN = SLIDES.length, host = $('slides'), els = [];
+  SLIDES.forEach(function (sl) { var d = document.createElement('section'); d.className = 'slide'; d.innerHTML = sl.html; host.appendChild(d); els.push(d); });
+  var D = { i: 0, st: 0 };
+  function drender() {
+    els.forEach(function (d, k) { d.classList.toggle('on', k === D.i); });
+    var d = els[D.i];
+    Array.prototype.forEach.call(d.querySelectorAll('[data-r]'), function (e) { e.classList.toggle('shown', +e.getAttribute('data-r') <= D.st); });
+    Array.prototype.forEach.call(d.querySelectorAll('[data-g]'), function (e) { e.classList.toggle('gone', +e.getAttribute('data-g') <= D.st); });
+    $('deck').setAttribute('data-i', D.i);
+    $('foot').textContent = (D.i + 1) + ' / ' + SN;
+    $('bar').style.width = ((D.i + 1) / SN * 100) + '%';
+    try { history.replaceState(null, '', '#' + (D.i + 1)); } catch (e) {}
+  }
+  function dnext() {
+    if (D.st < SLIDES[D.i].steps) D.st++;
+    else if (D.i < SN - 1) { D.i++; D.st = 0; }
+    drender();
+  }
+  function dprev() {
+    if (D.st > 0) D.st--;
+    else if (D.i > 0) { D.i--; D.st = SLIDES[D.i].steps; }
+    else { showResults(false); return; }
+    drender();
+  }
+  function enterDeck() { stopConfetti(); S.st = 'deck'; D.i = 0; D.st = 0; drender(); render(); }
+
+  /* ================= results + confetti ================= */
+  var cv = $('confetti'), cx = cv.getContext('2d'), parts = [], raf = 0, cStart = 0;
+  function stopConfetti() { if (raf) cancelAnimationFrame(raf); raf = 0; parts = []; cx.setTransform(1, 0, 0, 1, 0, 0); cx.clearRect(0, 0, cv.width, cv.height); }
+  function mk(x, y, vx, vy, delay) {
+    var cols = ['#6B46C1', '#D9488F', '#F2B33D', '#1B8F7B', '#3B6FD8', '#E4573D'];
+    return { x: x, y: y, vx: vx, vy: vy, w: 10 + Math.random() * 12, h: 6 + Math.random() * 8, r: Math.random() * 6.28, vr: (Math.random() - .5) * .35,
+      c: cols[Math.floor(Math.random() * cols.length)], round: Math.random() < .25, t: Math.random() * 6.28, d: delay || 0 };
+  }
+  function confetti() {
+    stopConfetti();
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    for (var i = 0; i < 70; i++) {
+      parts.push(mk(40, 800, 5 + Math.random() * 9, -(17 + Math.random() * 11), Math.random() * 120));
+      parts.push(mk(1140, 800, -(5 + Math.random() * 9), -(17 + Math.random() * 11), Math.random() * 120));
+    }
+    for (var j = 0; j < 90; j++) parts.push(mk(Math.random() * 1180, -20, (Math.random() - .5) * 2, 2 + Math.random() * 3, 300 + Math.random() * 1700));
+    cStart = performance.now(); cx.setTransform(2, 0, 0, 2, 0, 0);
+    (function frame(now) {
+      var el = now - cStart; cx.clearRect(0, 0, 1180, 820);
+      var alive = 0;
+      parts.forEach(function (p) {
+        if (el < p.d) { alive++; return; }
+        p.vy += .38; p.vx *= .992; p.x += p.vx + Math.sin(p.t += .08) * 1.2; p.y += p.vy; p.r += p.vr;
+        if (p.y > 860) return; alive++;
+        cx.save(); cx.translate(p.x, p.y); cx.rotate(p.r); cx.fillStyle = p.c;
+        if (p.round) { cx.beginPath(); cx.arc(0, 0, p.h * .6, 0, 6.3); cx.fill(); } else cx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+        cx.restore();
+      });
+      if (alive && el < 7000) raf = requestAnimationFrame(frame); else stopConfetti();
+    })(cStart);
+  }
+  function showResults(celebrate) {
+    var max = Math.max.apply(null, S.scores), wins = [];
+    S.scores.forEach(function (v, i) { if (max > 0 && v === max) wins.push(i); });
+    var h = '';
+    if (!wins.length) h += '<p class="res-kick">จบเกมแล้ว</p><p class="res-win">ไม่มีทีมได้คะแนน</p>';
+    else if (wins.length === 4) h += '<p class="res-kick">ผลการแข่งขัน</p><p class="res-win">เสมอกันทุกทีม!</p>';
+    else {
+      h += '<p class="res-kick">' + (wins.length > 1 ? 'ชนะร่วมกัน' : 'ผู้ชนะ') + '</p><p class="res-win">';
+      h += wins.map(function (i) { return '<span style="color:' + (i === 3 ? '#C98A00' : TB[i]) + '">' + NAMES[i] + '</span>'; }).join(' · ');
+      h += '</p>';
+    }
+    if (wins.length) h += '<p class="res-sub">' + max + ' คะแนน</p>';
+    h += '<div class="res-scores">' + S.scores.map(function (v, i) {
+      return '<div class="res-tile ' + (wins.indexOf(i) >= 0 ? 'win' : 'lose') + '" style="background:' + TB[i] + ';color:' + TF[i] + '"><span>' + NAMES[i] + '</span><b>' + v + '</b></div>';
+    }).join('') + '</div><p class="res-hint">แตะเพื่อไปต่อ</p>';
+    $('results').innerHTML = h;
+    S.st = 'results'; render();
+    if (celebrate && wins.length) confetti(); else stopConfetti();
+  }
+
   /* ---- keep screen awake ---- */
   var wake = null;
   function keepAwake() {
@@ -276,15 +522,19 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
   function pick(i) {
     if (S.st !== 'award' || S.locked) return;
     S.locked = true; S.scores[i] += 1; render();
-    later(function () { S.locked = false; S.st = 'idle'; render(); }, 750);
+    later(function () { S.locked = false; if (S.used.length >= n) showResults(true); else { S.st = 'idle'; render(); } }, 750);
   }
   $('wheel').addEventListener('click', function (e) { e.stopPropagation(); spin(); });
   $('wheel').addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); spin(); } });
   $('startBtn').addEventListener('click', function (e) { e.stopPropagation(); begin(); });
   $('revealBtn').addEventListener('click', function (e) { e.stopPropagation(); reveal(); });
-  $('skipBtn').addEventListener('click', function (e) { e.stopPropagation(); if (S.st === 'award') { S.st = 'idle'; render(); } });
+  $('skipBtn').addEventListener('click', function (e) { e.stopPropagation(); if (S.st === 'award') { if (S.used.length >= n) showResults(true); else { S.st = 'idle'; render(); } } });
   $('backLink').addEventListener('click', function (e) { e.stopPropagation(); });
-  document.documentElement.addEventListener('click', function () { if (S.st === 'revealed') { S.st = 'award'; render(); } });
+  document.documentElement.addEventListener('click', function (e) {
+    if (S.st === 'revealed') { S.st = 'award'; render(); }
+    else if (S.st === 'results') enterDeck();
+    else if (S.st === 'deck') { if (e.clientX < window.innerWidth / 2) dprev(); else dnext(); }
+  });
   $('themeBtn').addEventListener('click', function (e) {
     e.stopPropagation(); S.theme = S.theme === 'light' ? 'dark' : 'light';
     try { localStorage.setItem('wheelv3.theme', S.theme); } catch (x) {}
@@ -292,12 +542,20 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
   });
   document.addEventListener('keydown', function (e) {
     if (e.target && e.target.closest && e.target.closest('button, a, [role="button"]')) return;
+    if (S.st === 'deck') {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter' || e.key === 'PageDown') { e.preventDefault(); dnext(); }
+      else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); dprev(); }
+      return;
+    }
+    if (S.st === 'results') { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); enterDeck(); } return; }
     if (e.code !== 'Space' && e.key !== 'Enter') return;
     e.preventDefault();
     if (S.st === 'start') begin(); else if (S.st === 'idle') spin(); else if (S.st === 'landed') reveal(); else if (S.st === 'revealed') { S.st = 'award'; render(); }
   });
 
   try { var t = localStorage.getItem('wheelv3.theme'); if (t === 'light' || t === 'dark') S.theme = t; } catch (e) {}
+  var hm = /^#(\d+)$/.exec(location.hash || '');
+  if (hm) { S.st = 'deck'; D.i = Math.min(SN, Math.max(1, +hm[1])) - 1; drender(); }
   render();
   window.__wheel = S; /* handy for testing */
 })();
