@@ -29,7 +29,8 @@ button { font: inherit; }
 button:focus-visible { outline: 3px solid var(--muted); outline-offset: 3px; }
 
 .stage { position: fixed; left: 50%; top: 50%; width: 1180px; height: 820px; overflow: hidden; transform-origin: 50% 50%; transform: translate(-50%, -50%); }
-.wheel { position: absolute; left: 317px; top: 130px; width: 553px; height: 571px; cursor: pointer; transition: transform .9s cubic-bezier(.2,.8,.2,1); }
+.wheel { position: absolute; left: 317px; top: 130px; width: 553px; height: 571px; cursor: pointer; transition: transform .9s cubic-bezier(.2,.8,.2,1), translate 1.15s cubic-bezier(.2,.8,.2,1) .35s; }
+.stage[data-s="start"] .wheel, .stage[data-s="intro"] .wheel { translate: 0 900px; pointer-events: none; }
 .stage[data-s="landed"] .wheel, .stage[data-s="revealed"] .wheel, .stage[data-s="award"] .wheel { transform: translateX(-240px); }
 .spinner { position: relative; width: 100%; height: 100%; }
 .pointer { position: absolute; left: 50%; top: -6px; transform: translateX(-50%); width: 0; height: 0; border-left: 18px solid transparent; border-right: 18px solid transparent; border-top: 32px solid var(--fg); pointer-events: none; }
@@ -69,16 +70,23 @@ button:focus-visible { outline: 3px solid var(--muted); outline-offset: 3px; }
 .team-btn { cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 10px; min-height: 76px; padding: 10px 20px; border: 0; border-radius: 18px; font-weight: 700; font-size: 26px; }
 .team-btn .ts { font-size: 32px; }
 .skip { margin-top: 10px; min-height: 48px; background: none; border: 0; color: var(--muted); cursor: pointer; font-size: 18px; text-decoration: underline; text-underline-offset: 3px; }
-.turn { position: absolute; left: 0; top: 28px; width: 1180px; text-align: center; font-size: 36px; font-weight: 400; line-height: 1.2; pointer-events: none; }
+.turn { position: absolute; left: 0; top: 28px; width: 1180px; text-align: center; font-size: 36px; font-weight: 400; line-height: 1.2; pointer-events: none; transform-origin: 50% 0; transition: transform 1.1s cubic-bezier(.65,0,.25,1), opacity .4s; }
+.stage[data-s="start"] .turn, .stage[data-s="intro"] .turn { transform: translateY(360px) scale(2.4); }
+.stage[data-s="start"] .turn { opacity: 0; }
+.stage[data-s="intro"] .turn { opacity: 1; transition: transform 1.1s cubic-bezier(.65,0,.25,1), opacity .7s ease .3s; }
+.start-screen { position: absolute; inset: 0; z-index: 3; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 40px; transition: opacity .35s; }
+.stage:not([data-s="start"]) .start-screen { opacity: 0; pointer-events: none; }
+.start-title { font-size: 104px; font-weight: 400; letter-spacing: .14em; line-height: 1; padding-left: .14em; }
+.start-btn { cursor: pointer; border: 0; border-radius: 999px; background: var(--fg); color: var(--bg); font-weight: 700; font-size: 32px; padding: 10px 64px; min-height: 64px; }
 .scores { position: absolute; left: 0; right: 0; bottom: 22px; display: flex; justify-content: center; gap: 36px; color: var(--muted); font-size: 20px; transition: opacity .3s; }
 .scores b { color: var(--fg); font-size: 26px; margin-left: 6px; }
-.stage[data-s="landed"] .scores, .stage[data-s="revealed"] .scores, .stage[data-s="award"] .scores { opacity: 0; }
+.stage[data-s="start"] .scores, .stage[data-s="intro"] .scores, .stage[data-s="landed"] .scores, .stage[data-s="revealed"] .scores, .stage[data-s="award"] .scores { opacity: 0; }
 .theme-btn { position: absolute; right: 24px; top: 24px; z-index: 5; width: 52px; height: 52px; border-radius: 50%; border: 2px solid var(--line); background: transparent; color: var(--muted); display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; }
 .theme-btn .sun { display: none; }
 html[data-theme="light"] .theme-btn .sun { display: block; }
 html[data-theme="light"] .theme-btn .moon { display: none; }
 .back { position: absolute; left: 24px; top: 30px; z-index: 5; color: var(--muted); text-decoration: none; font-size: 18px; padding: 8px 4px; opacity: .8; }
-.stage:not([data-s="idle"]) .back { opacity: 0; pointer-events: none; }
+.stage:not([data-s="idle"]):not([data-s="start"]) .back { opacity: 0; pointer-events: none; }
 @media (prefers-reduced-motion: reduce) { .stage, .stage * { animation: none !important; } }
 </style>
 </head>
@@ -135,6 +143,7 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
 </div>
 
 <div class="turn" id="turn"></div>
+<div class="start-screen"><div class="start-title">SPINT</div><button type="button" class="start-btn" id="startBtn">เริ่ม</button></div>
 <div class="scores" id="scores"></div>
 </div>
 
@@ -148,7 +157,7 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
   var TB = ['#6B46C1', '#D9488F', '#1B8F7B', '#F2B33D'], TF = ['#FFFFFF', '#FFFFFF', '#FFFFFF', '#2A1B4D'];
   var PAL = [['#6B46C1','#FFFFFF'],['#D9488F','#FFFFFF'],['#F2B33D','#2A1B4D'],['#1B8F7B','#FFFFFF'],['#3B6FD8','#FFFFFF'],['#E4573D','#FFFFFF']];
   var R = 196, n = WORDS.length, a = 360 / n;
-  var S = { st: 'idle', rot: 0, idx: -1, used: [], scores: [0,0,0,0], locked: false, faceRot: 0, theme: 'light', face: '1', shake: 0 };
+  var S = { st: 'start', rot: 0, idx: -1, used: [], scores: [0,0,0,0], locked: false, faceRot: 0, theme: 'light', face: '1', shake: 0 };
   var timers = [], n4 = 4;
 
   function rule(b, v) {
@@ -196,10 +205,10 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
     var bgCol = L ? '#F6F3EE' : '#000000', dimFill = L ? '#DAD6E2' : '#222228', dimInk = L ? '#8C86A0' : '#6D6D78';
     root.setAttribute('data-theme', S.theme);
     stage.setAttribute('data-s', S.st);
-    stage.setAttribute('data-f', S.st === 'idle' ? 'z' : S.face);
+    stage.setAttribute('data-f', (S.st === 'idle' || S.st === 'start' || S.st === 'intro') ? 'z' : S.face);
     stage.setAttribute('data-shake', S.shake);
     $('disc').setAttribute('fill', bgCol);
-    var ti = (S.st === 'idle' || S.st === 'spinning') ? S.used.length % n4 : (S.used.length - 1 + n4) % n4;
+    var ti = (S.st === 'idle' || S.st === 'spinning' || S.st === 'start' || S.st === 'intro') ? S.used.length % n4 : (S.used.length - 1 + n4) % n4;
     $('turn').textContent = 'Team ' + (ti + 1);
     var landed = S.st !== 'idle' && S.st !== 'spinning';
     WORDS.forEach(function (w, i) {
@@ -258,6 +267,7 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
       S.st = 'landed'; S.face = '3'; S.shake = 0; render();
     }, 4500);
   }
+  function begin() { if (S.st !== 'start') return; keepAwake(); S.st = 'intro'; render(); later(function () { S.st = 'idle'; render(); }, 2000); }
   function reveal() { if (S.st === 'landed') { S.st = 'revealed'; render(); } }
   function pick(i) {
     if (S.st !== 'award' || S.locked) return;
@@ -266,6 +276,7 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
   }
   $('wheel').addEventListener('click', function (e) { e.stopPropagation(); spin(); });
   $('wheel').addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); spin(); } });
+  $('startBtn').addEventListener('click', function (e) { e.stopPropagation(); begin(); });
   $('revealBtn').addEventListener('click', function (e) { e.stopPropagation(); reveal(); });
   $('skipBtn').addEventListener('click', function (e) { e.stopPropagation(); if (S.st === 'award') { S.st = 'idle'; render(); } });
   $('backLink').addEventListener('click', function (e) { e.stopPropagation(); });
@@ -279,7 +290,7 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
     if (e.target && e.target.closest && e.target.closest('button, a, [role="button"]')) return;
     if (e.code !== 'Space' && e.key !== 'Enter') return;
     e.preventDefault();
-    if (S.st === 'idle') spin(); else if (S.st === 'landed') reveal(); else if (S.st === 'revealed') { S.st = 'award'; render(); }
+    if (S.st === 'start') begin(); else if (S.st === 'idle') spin(); else if (S.st === 'landed') reveal(); else if (S.st === 'revealed') { S.st = 'award'; render(); }
   });
 
   try { var t = localStorage.getItem('wheelv3.theme'); if (t === 'light' || t === 'dark') S.theme = t; } catch (e) {}
