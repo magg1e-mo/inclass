@@ -13,9 +13,11 @@
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
 <title>SPINT</title>
+<link rel="preload" href="../fonts/FCVision-Bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/FCVision-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="hub-face-closed.webp" as="image">
 <style>
 @font-face { font-family: 'FC Vision'; font-weight: 400; font-style: normal; font-display: swap; src: url('../fonts/FCVision-Regular.woff2') format('woff2'); }
-@font-face { font-family: 'FC Vision'; font-weight: 600; font-style: normal; font-display: swap; src: url('../fonts/FCVision-SemiBold.woff2') format('woff2'); }
 @font-face { font-family: 'FC Vision'; font-weight: 700; font-style: normal; font-display: swap; src: url('../fonts/FCVision-Bold.woff2') format('woff2'); }
 html { --bg: #000000; --fg: #FFFFFF; --muted: #9A9AA6; --line: #3A3A44; --v2: #56AC6B; --shadow: rgba(0,0,0,.6); color-scheme: dark; }
 html[data-theme="light"] { --bg: #F6F3EE; --fg: #1B1530; --muted: #6B6580; --line: #CFC8DC; --v2: #2E8B4F; --shadow: rgba(27,21,48,.25); color-scheme: light; }
@@ -36,8 +38,8 @@ button:focus-visible { outline: 3px solid var(--muted); outline-offset: 3px; }
 .pointer { position: absolute; left: 50%; top: -6px; transform: translateX(-50%); width: 0; height: 0; border-left: 18px solid transparent; border-right: 18px solid transparent; border-top: 32px solid var(--fg); pointer-events: none; }
 .lbl { position: absolute; left: 280px; top: 260px; width: 230px; height: 40px; transform-origin: 0 50%; display: flex; align-items: center; justify-content: flex-end; white-space: nowrap; font-weight: 700; }
 .facewrap { position: relative; width: 100%; height: 100%; }
-.facebox { position: absolute; left: 0; top: 0; width: 100%; height: 100%; transition: scale .3s; }
-.face { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 4px 10px var(--shadow)); opacity: 0; transition: opacity .12s; }
+.facebox { position: absolute; left: 0; top: 0; width: 100%; height: 100%; transition: scale .3s; filter: drop-shadow(0 4px 10px var(--shadow)); }
+.face { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: opacity .12s; }
 .stage[data-f="z"] .face-closed, .stage[data-f="1"] .f1, .stage[data-f="2"] .f2, .stage[data-f="3"] .f3 { opacity: 1; }
 .stage[data-f="2"] .facebox { scale: 1.06; }
 .stage[data-f="3"] .facebox { scale: 1.14; }
@@ -113,10 +115,10 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
   <div class="hub">
     <div class="facewrap" id="facewrap">
       <div class="facebox">
-        <img class="face face-closed" src="hub-face-closed.png" alt="">
-        <img class="face f1" src="face-1.png" alt="">
-        <img class="face f2" src="face-2.png" alt="">
-        <img class="face f3" src="face-3.png" alt="">
+        <img class="face face-closed" src="hub-face-closed.webp" alt="">
+        <img class="face f1" src="face-1.webp" alt="">
+        <img class="face f2" src="face-2.webp" alt="">
+        <img class="face f3" src="face-3.webp" alt="">
       </div>
     </div>
     <span class="zz" style="font-size:22px;animation-delay:0s">z</span>
