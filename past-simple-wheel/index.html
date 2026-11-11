@@ -112,7 +112,10 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
 .deck .frow.on .fw { color: var(--ad); }
 .deck .fth.swap { animation: d_ansin .35s ease both; }
 .deck .big { display: flex; align-items: center; gap: 24px; font-size: 104px; font-weight: 700; line-height: 1.1; }
-.deck .big .w1 { width: 420px; text-align: center; }
+/* -ed rule rows: arrow sits on the page's centre line, the two words hug it */
+.deck .big:not(.irr) { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); column-gap: 36px; }
+.deck .big:not(.irr) .w1 { text-align: right; }
+.deck .big:not(.irr) > :nth-child(3) { text-align: left; }
 .deck .big .ar { color: var(--muted); font-weight: 400; }
 .deck .big.irr { font-size: 44px; padding: 8px 0; border-bottom: 2px solid var(--line); }
 .deck .big.irr .iw { width: 190px; }
