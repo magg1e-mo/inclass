@@ -14,10 +14,12 @@
 <link rel="manifest" href="manifest.webmanifest">
 <title>SPINT</title>
 <link rel="preload" href="../fonts/FCVision-Bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/Inter-Light-team.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/FCVision-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="hub-face-closed.webp" as="image">
 <style>
 @font-face { font-family: 'FC Vision'; font-weight: 400; font-style: normal; font-display: swap; src: url('../fonts/FCVision-Regular.woff2') format('woff2'); }
+@font-face { font-family: 'Inter Light'; font-weight: 300; font-style: normal; font-display: swap; src: url('../fonts/Inter-Light-team.woff2') format('woff2'); }
 @font-face { font-family: 'FC Vision'; font-weight: 700; font-style: normal; font-display: swap; src: url('../fonts/FCVision-Bold.woff2') format('woff2'); }
 html { --bg: #000000; --fg: #FFFFFF; --muted: #9A9AA6; --line: #3A3A44; --v2: #56AC6B; --shadow: rgba(0,0,0,.6); color-scheme: dark; }
 html[data-theme="light"] { --bg: #F6F3EE; --fg: #1B1530; --muted: #6B6580; --line: #CFC8DC; --v2: #2E8B4F; --shadow: rgba(27,21,48,.25); color-scheme: light; }
@@ -31,7 +33,7 @@ button { font: inherit; }
 button:focus-visible { outline: 3px solid var(--muted); outline-offset: 3px; }
 
 .stage { position: fixed; left: 50%; top: 50%; width: 1180px; height: 820px; overflow: hidden; transform-origin: 50% 50%; transform: translate(-50%, -50%); }
-.wheel { position: absolute; left: 317px; top: 130px; width: 553px; height: 571px; cursor: pointer; transition: transform .9s cubic-bezier(.2,.8,.2,1), translate 1.15s cubic-bezier(.2,.8,.2,1) .35s; }
+.wheel { position: absolute; left: 317px; top: 158px; width: 553px; height: 571px; cursor: pointer; transition: transform .9s cubic-bezier(.2,.8,.2,1), translate 1.15s cubic-bezier(.2,.8,.2,1) .35s; }
 .stage[data-s="start"] .wheel, .stage[data-s="intro"] .wheel { translate: 0 900px; pointer-events: none; }
 .stage[data-s="landed"] .wheel, .stage[data-s="revealed"] .wheel, .stage[data-s="award"] .wheel { transform: translateX(-240px); }
 .spinner { position: relative; width: 100%; height: 100%; }
@@ -72,7 +74,7 @@ button:focus-visible { outline: 3px solid var(--muted); outline-offset: 3px; }
 .team-btn { cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 10px; min-height: 76px; padding: 10px 20px; border: 0; border-radius: 18px; font-weight: 700; font-size: 26px; }
 .team-btn .ts { font-size: 32px; }
 .skip { margin-top: 10px; min-height: 48px; background: none; border: 0; color: var(--muted); cursor: pointer; font-size: 18px; text-decoration: underline; text-underline-offset: 3px; }
-.turn { position: absolute; left: 0; top: 64px; width: 1180px; text-align: center; font-size: 36px; font-weight: 400; line-height: 1.2; pointer-events: none; transform-origin: 50% 0; transition: transform 1.1s cubic-bezier(.65,0,.25,1), opacity .4s; }
+.turn { position: absolute; left: 0; top: 64px; width: 1180px; text-align: center; font-family: 'Inter Light', 'FC Vision', system-ui, sans-serif; font-size: 36px; font-weight: 300; line-height: 1.2; pointer-events: none; transform-origin: 50% 0; transition: transform 1.1s cubic-bezier(.65,0,.25,1), opacity .4s; }
 .stage[data-s="start"] .turn, .stage[data-s="intro"] .turn { transform: translateY(324px) scale(2.4); }
 .stage[data-s="start"] .turn { opacity: 0; }
 .stage[data-s="intro"] .turn { opacity: 1; transition: transform 1.1s cubic-bezier(.65,0,.25,1), opacity .7s ease .3s; }
