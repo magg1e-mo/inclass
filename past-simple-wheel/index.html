@@ -89,8 +89,6 @@ button:focus-visible { outline: 3px solid var(--muted); outline-offset: 3px; }
 .theme-btn .sun { display: none; }
 html[data-theme="light"] .theme-btn .sun { display: block; }
 html[data-theme="light"] .theme-btn .moon { display: none; }
-.back { position: absolute; left: 24px; top: 70px; z-index: 5; color: var(--muted); text-decoration: none; font-size: 18px; padding: 8px 4px; opacity: .8; }
-.stage:not([data-s="idle"]):not([data-s="start"]) .back { opacity: 0; pointer-events: none; }
 @media (prefers-reduced-motion: reduce) { .stage, .stage * { animation: none !important; } .deck .ch { opacity: 1 !important; } .deck .tl-dot, .deck .tl-fill { transition: none !important; } }
 /* slides */
 .deck .slide { position: absolute; left: 96px; right: 96px; top: 130px; bottom: 90px; display: none; flex-direction: column; gap: 26px; }
@@ -174,7 +172,6 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
 <div id="safeTop" style="position:fixed;left:0;top:0;width:0;height:env(safe-area-inset-top,0px);pointer-events:none"></div>
 <div class="stage" id="stage" data-s="idle">
 
-<a class="back" href="../" id="backLink">← สื่อทั้งหมด</a>
 
 <button class="theme-btn" id="themeBtn" type="button" aria-label="สลับโหมดสว่างและมืด">
   <svg class="moon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
@@ -594,7 +591,6 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
   $('startBtn').addEventListener('click', function (e) { e.stopPropagation(); begin(); });
   $('revealBtn').addEventListener('click', function (e) { e.stopPropagation(); reveal(); });
   $('skipBtn').addEventListener('click', function (e) { e.stopPropagation(); if (S.st === 'award') { if (S.used.length >= n) showResults(true); else { S.st = 'idle'; render(); } } });
-  $('backLink').addEventListener('click', function (e) { e.stopPropagation(); });
   document.documentElement.addEventListener('click', function (e) {
     if (S.st === 'revealed') { S.st = 'award'; render(); }
     else if (S.st === 'results') enterDeck();
