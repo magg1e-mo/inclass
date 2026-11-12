@@ -21,8 +21,8 @@
 @font-face { font-family: 'FC Vision'; font-weight: 400; font-style: normal; font-display: swap; src: url('../fonts/FCVision-Regular.woff2') format('woff2'); }
 @font-face { font-family: 'Inter Light'; font-weight: 300; font-style: normal; font-display: swap; src: url('../fonts/Inter-Light-team.woff2') format('woff2'); }
 @font-face { font-family: 'FC Vision'; font-weight: 700; font-style: normal; font-display: swap; src: url('../fonts/FCVision-Bold.woff2') format('woff2'); }
-html { --card: #15131F; --tm: #7FA3F0; --ad: #F07A5F; --ng: #E873AE; --pu: #A98BFF; --bg: #000000; --fg: #FFFFFF; --muted: #9A9AA6; --line: #3A3A44; --v2: #56AC6B; --shadow: rgba(0,0,0,.6); color-scheme: dark; }
-html[data-theme="light"] { --card: #FFFFFF; --tm: #3B6FD8; --ad: #D8482C; --ng: #C93A82; --pu: #6B46C1; --bg: #F6F3EE; --fg: #1B1530; --muted: #6B6580; --line: #CFC8DC; --v2: #2E8B4F; --shadow: rgba(27,21,48,.25); color-scheme: light; }
+html { --card: #15131F; --tm: #7FA3F0; --ad: #F07A5F; --ng: #E873AE; --pu: #A98BFF; --bar: #B9B2A0; --bg: #000000; --fg: #FFFFFF; --muted: #9A9AA6; --line: #3A3A44; --v2: #56AC6B; --shadow: rgba(0,0,0,.6); color-scheme: dark; }
+html[data-theme="light"] { --card: #FFFFFF; --tm: #3B6FD8; --ad: #D8482C; --ng: #C93A82; --pu: #6B46C1; --bar: #CBBF9F; --bg: #F6F3EE; --fg: #1B1530; --muted: #6B6580; --line: #CFC8DC; --v2: #2E8B4F; --shadow: rgba(27,21,48,.25); color-scheme: light; }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 html, body { margin: 0; height: 100%; touch-action: none; }
@@ -146,7 +146,7 @@ html[data-theme="light"] .theme-btn .moon { display: none; }
 @keyframes d_chin { from { opacity: 0; transform: translateX(-16px); } to { opacity: 1; transform: none; } }
 .deck .typ[data-r] { opacity: 1; transform: none; transition: none; }
 .deck .typ[data-r].shown { visibility: visible; }
-.deck .bar { position: absolute; left: 0; bottom: 0; height: 5px; background: var(--pu); transition: width .3s; }
+.deck .bar { position: absolute; left: 0; bottom: 0; height: 5px; background: var(--bar); transition: width .3s; }
 .deck { position: absolute; inset: 0; display: none; }
 .stage[data-s="deck"] .deck { display: block; }
 .stage[data-s="deck"] .wheel, .stage[data-s="deck"] .panel, .stage[data-s="deck"] .turn, .stage[data-s="deck"] .scores,
